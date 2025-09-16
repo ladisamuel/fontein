@@ -1,0 +1,31 @@
+{
+  "defaults": {
+    "price_range": {
+      "min": 0,
+      "max": 1000000
+    },
+    "year_range": {
+      "min": 2000,
+      "max": 2025
+    },
+    "mileage_range": {
+      "min": 0,
+      "max": 200000
+    }
+  },
+  "make": [ "Toyota", "BMW", "Mercedes", "Ford", "Honda", "Jeep" ],
+  
+  "filters": {
+    "color": ["Black", "White", "Red", "Blue", "Silver", "Other"],
+    "status": ["Available", "Sold", "Reserved", "Importing"],
+    "transmission": ["Automatic", "Manual", "CVT", "Other"],
+    "fuel_type": ["Petrol", "Diesel", "Electric", "Hybrid", "Other"],
+    "condition": ["New", "Used", "Fair", "Damaged"]
+  },
+  "dynamic_filters": {
+    "make": "/api/makes/",
+    "model": "/api/models/?make_id={make_id}"
+  },
+  "text_search_fields": ["description", "vin"],
+  "sort_options": ["price_asc", "price_desc", "year_asc", "year_desc", "mileage_asc", "mileage_desc"]
+}

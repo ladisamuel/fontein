@@ -1,0 +1,35 @@
+{
+  "open": [
+    {
+      "text": "Home",
+      "link": "/",
+      "icon": ""
+    },
+    {
+      "text": "Repair service",
+      "link": "#",
+      "icon": ""
+    },
+    {
+      "text": "Register your car",
+      "link": "#",
+      "icon": ""
+    },
+    {
+      "text": "Search",
+      "link": "/search",
+      "icon": ""
+    }, 
+    {
+      "text": "",
+      "link": "#",
+      "icon": "pi pi-heart"
+    }, 
+    {
+      "text": "Login",
+      "link": "/auth/login",
+      "icon": ""
+    }
+  ],
+  "auth": []
+}
