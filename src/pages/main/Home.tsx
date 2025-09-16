@@ -3,20 +3,14 @@ import {
   Car,
   DollarSign,
   Wrench,
-  ChevronDown,
   Users,
-  Star,
-  Phone,
-  Mail,
-  MapPin,
 } from "lucide-react";
 import Header from "../../components/Header";
 import { getVehicles } from "../../utils/api/products";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { Vehicles } from "../../utils/type/vehicle";
 import Footer from "../../components/Footer";
-
-import { toQueryString } from "../../utils/toQueryString";
+import { toast } from "react-toastify";
 
 const AutoTradeWebsite: React.FC = () => {
   const [selectedBodyType, setBodyType] = useState("");

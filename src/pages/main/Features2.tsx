@@ -9,7 +9,6 @@ import {
   List, 
   Users, 
   TrendingUp,
-  ChevronDown 
 } from 'lucide-react';
 import Header from '../../components/Header';
 

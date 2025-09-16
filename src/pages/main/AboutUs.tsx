@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, Eye, Heart, Phone, Facebook, Instagram, Twitter } from 'lucide-react';
+import { CheckCircle, Eye, Heart } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 

@@ -1,6 +1,5 @@
 import menuItem from "../utils/link/menuLinks.json";
 import { Link } from "react-router-dom";
-// import CartModel from "./CartModel";
 import { useEffect, useState } from "react";
 export default function Header() {
   const menu = menuItem;
@@ -36,7 +35,6 @@ export default function Header() {
     <header className={`${
         top ? "shadow-2xl bg-red-400" : "shadow-none "
     }  h-[12vh] bg-white my-auto w-full z-50 fixed top-0 transition-all`}>
-      {/* <CartModel /> */}
       <nav className="max-w-7xl mx-auto main_padding">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">

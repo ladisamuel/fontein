@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Header from "../../components/Header";
-import { separateTexts } from "../../utils/generals";
 import searchData from "../../utils/searchTerms.json";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -35,25 +34,22 @@ const SearchResultsPage: React.FC = () => {
   const [filterData, setFilterData] = useState<any>([]);
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
-  >({});
-  // const [searchQuery, setSearchQuery] = useState<string>("");
-  const [page, setPage] = useState<number>(1)
-  const [limit, setLimit] = useState<number>(50)
+  >({}); 
 
   const [vehicles, setVehicles] = useState<Vehicle[]>();
 
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useState({
-    customText: "",
-    model: "",
-    year: "",
-    mileage: "",
-    status: "",
-    transmission: "",
-    fuel_type: "",
-    color: "",
-    engine_type: "",
-  });
+  // const [searchParams, setSearchParams] = useState({
+  //   customText: "",
+  //   model: "",
+  //   year: "",
+  //   mileage: "",
+  //   status: "",
+  //   transmission: "",
+  //   fuel_type: "",
+  //   color: "",
+  //   engine_type: "",
+  // });
   // price: "",
   // condition: "",
 

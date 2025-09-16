@@ -3,7 +3,6 @@ import { RouterProvider } from 'react-router-dom';
 import router from './router/Router';
 import { ToastContainer } from 'react-toastify';
 import { RecoilRoot } from 'recoil';
-import Header from './components/Header';
 
 function App() {
 
