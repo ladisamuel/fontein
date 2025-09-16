@@ -486,3 +486,4 @@ const SimilarVehicle = ({ car }: any) => (
 );
 
 export default VehicleDetailsPage;
+
