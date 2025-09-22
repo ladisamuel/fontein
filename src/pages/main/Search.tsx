@@ -133,26 +133,6 @@ const SearchResultsPage: React.FC = () => {
   const searchVehicles = async (searchOption?: string) => {
     setLoading(true);
 
-    
-      // id: 4,
-      // year: 2019,
-      // make: "Ford",
-      // model: "F-150 XLT",
-      // miles: 69000,
-      // transmission: "Automatic",
-      // price: 32000,
-      // image:
-      //   "http
-
-    // setSelectedFilters(currentFilters);
-    // setVehicles(data.results);
-    // const data = await response.json();
-    // const response = await fetch(
-      //   `http://your-backend-url/api/vehicles/?${currentFilters}`
-      // );
-      // const query = new URLSearchParams(searchParams).toString();
-
-      
       const query = {search: ''}
 
       if (searchOption && searchOption === 'url') {
@@ -172,14 +152,12 @@ const SearchResultsPage: React.FC = () => {
           query.search;
         window.history.pushState({ path: newurl }, "", newurl);
         
-        console.log( 'selectedFilters', selectedFilters);
       }
 
       // console.log( search.slice(1,  search.length));
       
     
     await searchVehiclesAPI(query.search.slice(0, query.search.length)).then((res)=>{
-      console.log(res?.data);
       setVehicles(res?.data?.results)
       
     })
@@ -190,51 +168,10 @@ const SearchResultsPage: React.FC = () => {
 
     setLoading(false);
   };
-
-  // const renderInputs = () => {
-  //   return Object.entries(searchParams).map(([key, value]) => {
-  //     // For each key, we create a corresponding input field
-  //     if (key === "customText") {
-  //       key = "Search";
-  //     }
-
-  //     return (
-  //       <div key={key}>
-  //         <label htmlFor={key} className="text-xs font-medium text-gray-700">
-  //           {separateTexts(key)}:
-  //         </label>
-  //         <input
-  //           className="appearance-none text-xs bg-white border w-full border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-  //           type="text"
-  //           id={key}
-  //           name={key}
-  //           value={value}
-  //           onChange={handleChange}
-  //           placeholder={`Enter ${separateTexts(key)}`}
-  //         />
-  //       </div>
-  //     );
-  //   });
-  // };
-
-  // year, amount, mileage
-  // const renderSearchRange = () => {
-  //   return Object.entries(searchParams).map(([key, value]) => {
-
-  //     return ()
-  //   })
-
-  // }
+ 
 
   const changeVisibility = (payload: any) => {
-    // console.log(payload);
-    // Object.keys(payload)[0]
-
-    // filterData.forEach((item: any)=>{
-    //   if (item?.name===Object.keys(payload)[0]) {
-    //     const d = {...item, item.visibility}
-    //   }
-    // })
+ 
     const data = {
       name: Object.keys(payload)[0],
       visibility: false,
@@ -247,7 +184,6 @@ const SearchResultsPage: React.FC = () => {
       );
 
       if (existingIndex !== -1) {
-        // Toggle visibility of existing item
         const updated = [...prev];
         updated[existingIndex] = {
           ...updated[existingIndex],
@@ -287,7 +223,7 @@ const SearchResultsPage: React.FC = () => {
       ? [...currentValues, value]
       : currentValues.filter((v) => v !== value);
 
-    const updatedFilters = {
+    const updatedFilters : any = {
       ...selectedFilters,
       [key]: updatedValues,
     };
@@ -452,9 +388,14 @@ const SearchResultsPage: React.FC = () => {
       <Header />
  
       {/* Search Results Header */}
-      <section className="bg-green-800 text-white py-12">
+      <section 
+      style={{
+        backgroundBlendMode: "multiply"
+      }} className="bg-[#00000096]  bg-gradient-to-r from-green-600 to-purple-600 text-white py-20"
+      // className="bg-green-800 text-white py-12"
+      >
         <div className="max-w-7xl mx-auto main_padding text-center">
-          <h1 className="text-4xl font-bold text-blue-400 mb-4">
+          <h1 className="text-4xl font-bold text-white mb-4">
             Your Search Results
           </h1>
           <p className="text-lg">
@@ -723,7 +664,7 @@ const SearchResultsPage: React.FC = () => {
                   key={vehicle.id}
                   className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-all"
                 >
-                  <div className="relative h-48">
+                  <div className="relative h-48 ">
                     <img
                       src={vehicle.first_image}
                       alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
@@ -731,14 +672,14 @@ const SearchResultsPage: React.FC = () => {
                     />
                   </div>
                   <div className="p-2 lg:p-4">
-                    <h3 className="text-green-600 font-semibold text-gray-900 mb-2">
-                      {`${
+                    <h3 className="text-green-600 font-semibold text-gray900 mb-2">
+                     {`${
                         vehicle.year + " " + vehicle.make + " " + vehicle.model
                       }`.slice(0, 20)}
                       ...
                     </h3>
                     <div className="flex justify-between items-center text-xs text-gray-600 mb-4">
-                      <span>{vehicle.mileage.toLocaleString()}</span>
+                      <span>{vehicle.mileage.toLocaleString()} miles</span>
                       <span>{vehicle.transmission}</span>
                     </div>
                     <div className="flex justify-between items-center">

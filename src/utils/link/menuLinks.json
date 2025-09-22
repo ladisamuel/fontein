@@ -6,20 +6,15 @@
       "icon": ""
     },
     {
-      "text": "Repair service",
-      "link": "#",
-      "icon": ""
-    },
-    {
-      "text": "Register your car",
-      "link": "#",
-      "icon": ""
-    },
-    {
       "text": "Search",
       "link": "/search",
       "icon": ""
     }, 
+    {
+      "text": "Repair service",
+      "link": "/repair",
+      "icon": ""
+    },
     {
       "text": "",
       "link": "#",

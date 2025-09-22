@@ -38,9 +38,33 @@ const forgotPasswordValidation = yup.object().shape({
 });
 
 
+const repairVAlidation = yup.object().shape({
+  fullName: yup.string().required('Please enter your name!'),
+  email:  yup.string().email('Please enter a valid email.').required('Please enter your name!'),
+  phone: yup.string().required('Please enter your phone number!'),
+  contactMethod:  yup.string().required('Required'),
+  year: yup.string().required('Required'),
+  make: yup.string().required('Required'),
+  model: yup.string().required('Required'),
+  licensePlate: yup.string(),
+  vin: yup.string(),
+  mileage: yup.string(),
+  transmission:  yup.string().required('Required'),
+  requestType: yup.string().required('Required'),
+  description: yup.string().required('Required'),
+  // preferredDate: yup.string().required('Required'),
+  preferredDate: yup.date().min(new Date(), "Date must be in the future").required("Preferred date is required"),
+  preferredTime: yup.string(),
+  serviceMethod: yup.string().required('Required'),
+  address: yup.string().required('Required'),
+  
+})
+
 
 export { 
     loginUserValidation,
     registerUserValidation,
     forgotPasswordValidation,
+
+    repairVAlidation,
  };

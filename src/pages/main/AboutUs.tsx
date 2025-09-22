@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckCircle, Eye, Heart } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { Link } from 'react-router-dom';
 
 const AboutPage: React.FC = () => {
   return (
@@ -12,7 +13,14 @@ const AboutPage: React.FC = () => {
 
 
       {/* Hero Section */}
-      <section className="bg-black text-white py-16 rounded-lg mx-4 mt-8 mb-8">
+      <section
+      
+      style={{
+        backgroundBlendMode: "multiply"
+      }} className="bg-[#00000096] mt-[12vh] bg-gradient-to-r from-green-600 to-purple-600 text-white py-20"
+
+      //  className="bg-black text-white py-16 rounded-lg mx-4 mt-8 mb-8"
+       >
         <div className="max-w-4xl mx-auto text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">About AutoTradePro</h1>
           <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
@@ -106,9 +114,9 @@ const AboutPage: React.FC = () => {
           <p className="text-gray-300 mb-8">
             Explore our extensive listings or get in touch with our expert team today!
           </p>
-          <button className="bg-green-600 text-white px-8 py-3 rounded-md hover:bg-green-700 transition-colors font-semibold">
+          <Link to='/search' className="bg-green-600 text-white px-8 py-3 rounded-md hover:bg-green-700 transition-colors font-semibold">
             Browse Vehicles
-          </button>
+          </Link>
         </div>
       </section>
 

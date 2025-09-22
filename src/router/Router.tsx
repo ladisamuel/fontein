@@ -7,10 +7,9 @@ import AboutUs from '../pages/main/AboutUs';
 import FeaturesPage from '../pages/main/Features2';
 import SearchResultsPage from '../pages/main/Search';
 import VehicleDetailsPage from '../pages/main/VehicleDetail';
-import AuthLayout from './layouts/AuthLayout';
 import Register from '../pages/auth/Register';
-import LoginTwo from '../pages/auth/LoginTwo';
 import LoginThree from '../pages/auth/LoginThree';
+import RepairService from '../pages/main/RepairService';
 
 
 const router = createBrowserRouter([
@@ -97,6 +96,10 @@ const router = createBrowserRouter([
       {
         path: 'features',
         element: <FeaturesPage />
+      },
+      {
+        path: 'repair',
+        element: <RepairService />
       },
       {
         path: 'search',

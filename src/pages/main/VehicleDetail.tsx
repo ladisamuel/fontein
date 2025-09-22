@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import Header from "../../components/Header";
 import { Link, useParams } from "react-router-dom";
-import { getAVehicle, searchVehiclesAPI } from "../../utils/api/products";
+import { createAVehicleEnquiry, getAVehicle, searchVehiclesAPI } from "../../utils/api/products";
 import type { Vehicles } from "../../utils/type/vehicle";
 import Footer from "../../components/Footer";
 import { Galleria } from "primereact/galleria";
@@ -22,7 +22,8 @@ const VehicleDetailsPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [otherVehicles, setOtherVehicles] = useState<Vehicles[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
-  const [inquiry, setInquiry] = useState<any>({})
+  const [inquiry, setInquiry] = useState<any>({});
+  const [loading, setLoading] = useState<any>({})
 
   const params = useParams();
   // const id = params.slug?.split("-")[0];
@@ -52,6 +53,37 @@ const VehicleDetailsPage = () => {
     });
 
     // setLoading(false);
+  };
+
+  const updateRememberMe = () => {
+    if (inquiry["delivery_option"] && inquiry["delivery_option"] === true) {
+      setInquiry({ ...inquiry, delivery_option: false });
+    } else {
+      setInquiry({ ...inquiry, delivery_option: true });
+    }
+  };
+
+  const submitEnquiry = async () => {
+    setLoading({...loading, submitEnquiry: true})
+    console.log(inquiry);
+    const payload = {
+      ...inquiry,
+      vehicle: id,
+    }
+
+    // console.log(payload);
+    // setTimeout(() => {
+    //   console.log(payload);
+    // }, 5000);
+    // console.log('after settime out');
+    
+    await createAVehicleEnquiry(payload).then((res)=>{
+      console.log(res);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+      setLoading({...loading, submitEnquiry: false})
   };
 
   useEffect(() => {
@@ -86,6 +118,7 @@ const VehicleDetailsPage = () => {
   // const images = [img1, img2, img3, img4];
   return (
     <div className="min-h-screen mt-[12vh] bg-gray-100">
+      {/* Enquiry form */}
       <Dialog
         header="Process Payment"
         visible={visible}
@@ -112,13 +145,20 @@ const VehicleDetailsPage = () => {
             </p>
           </div>
           <div className="p-3">
-            <div>
+            {loading?.submitEnquiry ? 
+            <div className="">
+              <div className="w-full h-[200px] flex items-center justify-center">
+                <i className="pi pi-spinner pi-spin text-6xl text-green-600 "></i>
+              </div>
+            </div>
+            : 
+            <div className="transition-all ease-in-out duration-300">
               {/* <input type="text" placeholder="Enter your name:" />
               <input type="text" placeholder="Enter your email:" />
               <input type="text" placeholder="Enter your phone number:" /> */}
 
               <div>
-                <div className="relative flex flex-col borde h-12 mt-8 "> 
+                <div className="relative flex flex-col borde h-12 mt-8 ">
                   <label
                     className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
                   >
@@ -130,15 +170,14 @@ const VehicleDetailsPage = () => {
                     className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
                     required
                     value={inquiry?.name}
-                    
-                    // onChange={(e) => {
-                    // setInquiry({...inquiry, inquiry['name']:e.target.value})
-                    // }}
+                    onChange={(e) => {
+                      setInquiry({ ...inquiry, name: e.target.value });
+                    }}
                   />
                 </div>
               </div>
               <div>
-                <div className="relative borde h-12 mt-8 "> 
+                <div className="relative borde h-12 mt-8 ">
                   <label
                     className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
                   >
@@ -149,10 +188,10 @@ const VehicleDetailsPage = () => {
                     name="email"
                     className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
                     required
-                    // value={inquiry.email}
-                    // onChange={(e) => {
-                    // setInquiry({...inquiry, inquiry['email']:e.target.value})
-                    // }}
+                    value={inquiry.email}
+                    onChange={(e) => {
+                      setInquiry({ ...inquiry, email: e.target.value });
+                    }}
                   />
                 </div>
               </div>
@@ -169,23 +208,22 @@ const VehicleDetailsPage = () => {
                     name="phone"
                     className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
                     required
-                    // value={inquiry.phone}
-                    // onChange={(e) => {
-                    // setInquiry({...inquiry, inquiry['phone']:e.target.value})
-                    // }}
+                    value={inquiry.phone}
+                    onChange={(e) => {
+                      setInquiry({ ...inquiry, phone: e.target.value });
+                    }}
                   />
                 </div>
               </div>
 
-              {/* Remember Me Checkbox */}
+              {/* delivery_option Checkbox */}
               <div className="flex items-center my-5 mb-2">
                 <input
                   type="checkbox"
                   id="remember"
-                  // checked={rememberMe}
-                    // onChange={(e) => {
-                    // setInquiry({...inquiry, inquiry['phone']:e.target.value})
-                    // }}
+                  value={inquiry.delivery_option}
+                  checked={inquiry.delivery_option}
+                  onChange={updateRememberMe}
                   className="h-4 w-4 bg-green-600 text-green-600 border-gray-300 rounded focus:ring-green-600"
                 />
                 <label htmlFor="remember" className="ml-2 block text-gray-700">
@@ -193,11 +231,17 @@ const VehicleDetailsPage = () => {
                 </label>
               </div>
 
-              <button className="mt-8 btn_primary text-white px-10 py-2 rounded-lg">Submit</button>
+              <button
+                onClick={submitEnquiry}
+                className="mt-8 btn_primary text-white px-10 py-2 rounded-lg"
+              >
+                Submit
+              </button>
 
               {/* Password Field */}
               <div></div>
             </div>
+            }
           </div>
         </div>
       </Dialog>
@@ -240,7 +284,7 @@ const VehicleDetailsPage = () => {
               ></div>
               <div className="flex items-center gap-5">
                 {carItem?.images &&
-                  carItem?.images?.map((image, index) => {
+                  carItem?.images?.slice(0, 3).map((image, index) => {
                     let imgEl = (
                       <div
                         key={index}
@@ -265,7 +309,16 @@ const VehicleDetailsPage = () => {
                         {imgEl}
                       </div>
                     );
-                  })}
+                  })} 
+                  {carItem?.images?.length > 3 ? 
+                  <div
+                                          onClick={() => {
+                          setActiveIndex(0);
+                          galleria?.current?.show();
+                        }}
+                         className="flex items-center justify-center rounded w-[40px] h-[70px] bg-black"><i className="pi pi-angle-right text-white"></i>
+                         </div>
+                  :''}
               </div>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -486,4 +539,3 @@ const SimilarVehicle = ({ car }: any) => (
 );
 
 export default VehicleDetailsPage;
-

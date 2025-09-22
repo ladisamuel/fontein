@@ -66,7 +66,7 @@ const LoginThree: React.FC = () => {
   //               <button className="text-gray-700 hover:text-gray-900 transition-colors duration-200">
   //                 Login
   //               </button>
-  //               <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+  //               <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
   //                 Register
   //               </button>
   //             </div>
@@ -75,7 +75,7 @@ const LoginThree: React.FC = () => {
   //       </nav>
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex flex-col">
+    <div className="min-h-screen mt-[12vh] w-full bg-gray-50 flex flex-col">
       {/* Navigation */}
 
       <Header />
@@ -112,7 +112,7 @@ const LoginThree: React.FC = () => {
                       id="email"
                       name="email"
                       type="email"
-                      className={`w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 ${
+                      className={`w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-all duration-200 ${
                         errors.email && touched.email
                           ? "ring-2 ring-red-500 bg-red-50"
                           : ""
@@ -138,7 +138,7 @@ const LoginThree: React.FC = () => {
                       name="password"
                       type="password"
                       placeholder="••••••••••••"
-                      className={`w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 ${
+                      className={`w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-all duration-200 ${
                         errors.password && touched.password
                           ? "ring-2 ring-red-500 bg-red-50"
                           : ""
@@ -155,7 +155,7 @@ const LoginThree: React.FC = () => {
                   <div className="text-right">
                     <a
                       href="#"
-                      className="text-blue-500 hover:text-blue-600 text-sm transition-colors duration-200"
+                      className="text-green-500 hover:text-green-600 text-sm transition-colors duration-200"
                     >
                       Forgot password?
                     </a>
@@ -166,7 +166,7 @@ const LoginThree: React.FC = () => {
                     type="button"
                     onClick={() => formikSubmit()}
                     disabled={!isValid || isLoading}
-                    className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center"
+                    className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     {isLoading ? (
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -183,7 +183,7 @@ const LoginThree: React.FC = () => {
               <span className="text-gray-600">Don't have an account? </span>
               <a
                 href="#"
-                className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
+                className="text-green-500 hover:text-green-600 font-medium transition-colors duration-200"
               >
                 Register
               </a>

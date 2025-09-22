@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Header from "../../components/Header";
 import { getVehicles } from "../../utils/api/products";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { Vehicles } from "../../utils/type/vehicle";
 import Footer from "../../components/Footer";
 import { toast } from "react-toastify";
@@ -26,9 +26,6 @@ const AutoTradeWebsite: React.FC = () => {
     getVehicles().then((res) => {
       console.log(res);
       setCarListings(res?.data?.results);
-
-      console.log(res?.data?.results);
-      
     });
   };
 
@@ -91,12 +88,12 @@ const AutoTradeWebsite: React.FC = () => {
                 Buy, sell, or maintain your vehicle—all in one place.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="btn_primary px-8 py-3 rounded-md font-semibold">
+                <Link to='/search' className="btn_primary px-8 py-3 rounded-md font-semibold">
                   Browse Inventory
-                </button>
-                <button className="border-2 border-gray-300 text-white px-8 py-3 rounded-md hover:bg-white hover:text-gray-900 transition-colors font-semibold">
-                  Sell Your Car
-                </button>
+                </Link>
+                <Link to='/repair' className="border-2 border-gray-300 text-white px-8 py-3 rounded-md hover:bg-white hover:text-gray-900 transition-colors font-semibold">
+                  Request Maintenance
+                </Link>
               </div>
             </div>
           </div>
@@ -156,7 +153,7 @@ const AutoTradeWebsite: React.FC = () => {
 
           {/* Car Listings Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {carListings.map((car, index) => (
+            {carListings?.map((car, index) => (
               <div
                 key={index}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"

@@ -11,18 +11,23 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { Link } from 'react-router-dom';
 
 // cld
 const FeaturesPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen mt-[12vh] bg-gray-50">
       
             {/* Header */}
             <Header />
             
 
       {/* Hero Section */}
-      <section className="bg-green-800 text-white py-20">
+      <div className="main_paddin">
+      <section style={{
+        backgroundBlendMode: "multiply"
+      }} className="bg-[#00000096] rounded4xl  bg-gradient-to-r from-green-600 to-purple-600 text-white py-20">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Discover AutoTradePro's Powerful Features
@@ -33,6 +38,7 @@ const FeaturesPage: React.FC = () => {
           </p>
         </div>
       </section>
+      </div>
 
       {/* Effortless Buying & Selling Section */}
       <section className="py-20 bg-white">
@@ -176,25 +182,26 @@ const FeaturesPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-blue-600 text-white py-16 mx-4 rounded-lg mb-8">
+      <section className="bg-gray-600 text-white py-16 mx-4 rounded-lg mb-8">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-blue-100 mb-8">
             Experience the power of our comprehensive auto trading platform today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-md hover:bg-gray-100 transition-colors font-semibold">
-              Start Free Trial
-            </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-md hover:bg-white hover:text-blue-600 transition-colors font-semibold">
-              View Demo
-            </button>
+            <Link to='/search' className="bg-white text-blue-600 px-8 py-3 rounded-md hover:bg-gray-100 transition-colors font-semibold">
+              Request Test Drive
+            </Link>
+            <Link to='/repair' className="border-2 border-white text-white px-8 py-3 rounded-md hover:bg-white hover:text-blue-600 transition-colors font-semibold">
+              Repair Your Vehicle
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white">
+      <Footer />
+      {/* <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto main_padding py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -243,7 +250,7 @@ const FeaturesPage: React.FC = () => {
             <p className="text-gray-400">© 2024 Firma Auto Trade. All rights reserved.</p>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

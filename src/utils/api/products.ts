@@ -18,9 +18,13 @@ const getAVehicle = (id:any) => {
     return axios.get(`${BASEURL}mains/vehicles/${id}/`)
 }
 
+const createAVehicleEnquiry = (data:any) => {
+    return axios.post(`${BASEURL}mains/enquiry/vehicles/`, data)
+}
 
 export {
     getVehicles,
     searchVehiclesAPI,
     getAVehicle,
+    createAVehicleEnquiry,
 }
