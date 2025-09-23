@@ -24,7 +24,8 @@ dist-ssr
 *.sw?
 .env
 *.env
-
+fontein.rar
+*.rar
 
 
 TD.md

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
-import * as Yup from "yup";
+// import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
+// import * as Yup from "yup";
 import {
   Car,
   Shield,
@@ -155,8 +156,8 @@ const AutoTradePro: React.FC = () => {
   const {
     values,
     errors,
-    isValid,
-    isSubmitting,
+    // isValid,
+    // isSubmitting,
     touched,
     handleBlur,
     handleChange,

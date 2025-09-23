@@ -310,6 +310,8 @@ const VehicleDetailsPage = () => {
                       </div>
                     );
                   })} 
+
+                 {/* 
                   {carItem?.images?.length > 3 ? 
                   <div
                                           onClick={() => {
@@ -319,6 +321,8 @@ const VehicleDetailsPage = () => {
                          className="flex items-center justify-center rounded w-[40px] h-[70px] bg-black"><i className="pi pi-angle-right text-white"></i>
                          </div>
                   :''}
+                 */}
+
               </div>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
