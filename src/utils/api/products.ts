@@ -8,11 +8,9 @@ const getVehicles = () => {
     return axios.get(`${BASEURL}mains/vehicles/`)
 }
 
-    const searchVehiclesAPI = async (payload: string, page?: number, limit?: number) => {
-        return axios.get(`${BASEURL}mains/vehicles/?page=${page ?? 1}&limit=${limit ?? 50}&${payload}`)
-    }
-//   `http://your-backend-url/api/vehicles/?${query}`
-
+const searchVehiclesAPI = async (payload: string, page?: number, limit?: number) => {
+    return axios.get(`${BASEURL}mains/vehicles/?page=${page ?? 1}&limit=${limit ?? 50}&${payload}`)
+}
 
 const getAVehicle = (id:any) => {
     return axios.get(`${BASEURL}mains/vehicles/${id}/`)
@@ -22,9 +20,21 @@ const createAVehicleEnquiry = (data:any) => {
     return axios.post(`${BASEURL}mains/enquiry/vehicles/`, data)
 }
 
+const createVehicleRepair = (data:any) => {
+    return axios.post(`${BASEURL}mains/repair/vehicles/`, data)
+}
+
+const editVehicleRepair = (data:any, id: any) => {
+    return axios.put(`${BASEURL}mains/repair/vehicles/${id}`, data)
+}
+
+
+
 export {
     getVehicles,
     searchVehiclesAPI,
     getAVehicle,
     createAVehicleEnquiry,
+    createVehicleRepair,
+    editVehicleRepair,
 }

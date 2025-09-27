@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-// import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
-// import * as Yup from "yup";
 import {
   Car,
   Shield,
@@ -17,60 +15,44 @@ import {
   Upload,
   Truck,
   Home,
+  MapPinX,
 } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { repairVAlidation } from "../../utils/validation/validation";
+import { toast } from "react-toastify";
+import { createVehicleRepair, editVehicleRepair } from "../../utils/api/products";
+import { useRecoilState } from "recoil";
+import { repairRequestState } from "../../utils/atom/repairAtom";
+import { Dialog } from "primereact/dialog";
 
 interface FormValues {
-  fullName: string;
+  full_name: string;
   email: string;
   phone: string;
-  contactMethod: "email" | "sms" | "call";
+  contact_method: "email" | "sms" | "call";
   year: string;
   make: string;
   model: string;
-  licensePlate: string;
+  license_plate: string;
   vin: string;
-  mileage: string;
+  mileage: number;
   transmission: "automatic" | "manual";
-  requestType: "repair" | "maintenance" | "inspection";
+  request_type: "repair" | "maintenance" | "inspection";
   description: string;
-  preferredDate: string;
-  preferredTime: "morning" | "afternoon";
-  serviceMethod: "shop" | "tow" | "pickup";
+  preferred_date: string;
+  preferred_time: "morning" | "afternoon";
+  service_method: "dropoff" | "tow" | "pickup";
   address: string;
 }
-
-// const validationSchema = Yup.object({
-//   fullName: Yup.string().required("Full name is required"),
-//   email: Yup.string()
-//     .email("Invalid email format")
-//     .required("Email is required"),
-//   phone: Yup.string()
-//     .matches(/^[\+]?[1-9][\d]{0,15}$/, "Invalid phone number")
-//     .required("Phone number is required"),
-//   contactMethod: Yup.string().required("Contact method is required"),
-//   year: Yup.number()
-//     .min(1900, "Year must be after 1900")
-//     .max(new Date().getFullYear() + 1, "Invalid year")
-//     .required("Year is required"),
-//   make: Yup.string().required("Make is required"),
-//   model: Yup.string().required("Model is required"),
-//   licensePlate: Yup.string().required("License plate is required"),
-//   mileage: Yup.number()
-//     .min(0, "Mileage must be positive")
-//     .required("Mileage is required"),
-//   requestType: Yup.string().required("Request type is required"),
-//   description: Yup.string().required("Service description is required"),
-//   preferredDate: Yup.date().min(new Date(), "Date must be in the future").required("Preferred date is required"),
-//   preferredTime: Yup.string().required("Preferred time is required"),
-//   serviceMethod: Yup.string().required("Service method is required"),
-// });
-
+ 
 const AutoTradePro: React.FC = () => {
   const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
   const [estimatedTotal, setEstimatedTotal] = useState(0);
+  const [repairData, setRepairData] = useRecoilState(repairRequestState)
+  const [requestStatus, setRequestStatus] = useState<string | null>(null);
+
+
 
   const packages = [
     {
@@ -103,7 +85,7 @@ const AutoTradePro: React.FC = () => {
     }
   };
 
-  const RequestType = [
+  const request_type = [
     {
       value: "repair",
       icon: Wrench,
@@ -124,40 +106,58 @@ const AutoTradePro: React.FC = () => {
     },
   ];
 
-  const onSubmit = (values: FormValues) => {
+  // const onSubmit = async (values: FormValues) => {
+  const onSubmit = async () => {
     console.log("Form submitted:", {
       ...values,
       selectedPackages,
       estimatedTotal,
     });
+    // sdsd
+    // console.log('repairData', repairData)
 
-    alert("Request submitted successfully!");
+    if (repairData) {
+      await editVehicleRepair(values, repairData?.id).then((res)=>{
+        console.log(res)
+        setRepairData(res.data)
+        setRequestStatus('Updated')
+        toast.success("Request submitted successfully!");
+      })
+      
+    } else {
+      await createVehicleRepair(values).then((res)=>{
+        console.log(res)
+        setRepairData(res.data)
+        setRequestStatus('Created')
+        toast.success("Request submitted successfully!");
+      })
+    }
   };
   const initialValues: FormValues = {
-    fullName: "",
-    email: "",
-    phone: "",
-    contactMethod: "email",
-    year: "",
-    make: "",
-    model: "",
-    licensePlate: "",
-    vin: "",
-    mileage: "",
-    transmission: "automatic",
-    requestType: "repair",
-    description: "",
-    preferredDate: "",
-    preferredTime: "morning",
-    serviceMethod: "shop",
-    address: "",
+    full_name: repairData?.full_name ?? "",
+    email: repairData?.email ?? "",
+    phone: repairData?.phone ?? "",
+    contact_method: repairData?.contact_method ?? "call",
+    year: repairData?.year ?? "",
+    make: repairData?.make ?? "",
+    model: repairData?.model ?? "",
+    license_plate: repairData?.license_plate ?? "",
+    vin: repairData?.vin ?? "",
+    mileage: repairData?.mileage ?? 0,
+    transmission: repairData?.transmission ?? "automatic",
+    request_type: repairData?.request_type ?? "repair",
+    description: repairData?.description ?? "",
+    preferred_date: repairData?.preferred_date ?? "",
+    preferred_time: repairData?.preferred_time ?? "morning",
+    service_method: repairData?.service_method ?? "dropoff",
+    address: repairData?.address ?? "",
   };
 
   const {
     values,
     errors,
-    // isValid,
-    // isSubmitting,
+    isValid,
+    isSubmitting,
     touched,
     handleBlur,
     handleChange,
@@ -169,9 +169,36 @@ const AutoTradePro: React.FC = () => {
     onSubmit,
   });
 
+  useEffect(()=>{
+    if (repairData) {
+      console.log(repairData)
+    } 
+
+  }, [])
   return (
     <div className="min-h-screen  bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Header */}
+      <Dialog
+      
+        header={requestStatus === 'Created' ? "Repair Request Sent" : requestStatus === 'Updated' ? "Repair Request Updated" : ""  }
+        visible={requestStatus !== null}
+        className="p-2 min-h-[60vh] bg-white "
+        style={{ width: "500px" }}
+        onHide={() => {
+          if (!requestStatus) return;
+          setRequestStatus(null);
+        }}>
+          <div className="h-[50vh] flex flex-col items-center justify-center">
+
+          <div className="py-10 h-fit text-center w-fit">
+            <p>Thank you <span className='font-bold'>{values.full_name}</span> for your request.</p>
+            <p>One of our correspondent will get back to you shortly</p>
+          </div>
+          </div>
+          <button
+          onClick={()=>setRequestStatus(null)} className='btn_primary m-3 px-5 py-2 text-white rounded-xl'>Proceed</button>
+
+        </Dialog>
       <div className="">
         <Header />
       </div>
@@ -234,6 +261,20 @@ const AutoTradePro: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Form */}
             <div className="lg:col-span-2 space-y-8">
+              {
+                repairData && (
+
+                  <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-3">
+                  <div className="bg-blue-100 p-2 rounded-lg">
+                    <MapPinX className="w-5 h-5 text-green-600" />
+                  </div>
+                  <span className=" text-green-600">You already have a booking, </span>
+                </h3>
+                
+                You can edit the form below to update your request.
+              </div>
+              )}
               {/* Personal Details */}
               <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-3">
@@ -251,8 +292,8 @@ const AutoTradePro: React.FC = () => {
 
                     <input
                       type="text"
-                      name="fullName"
-                      value={values.fullName}
+                      name="full_name"
+                      value={values.full_name}
                       onBlur={handleBlur}
                       placeholder="Mark Clarke"
                       onChange={handleChange}
@@ -261,18 +302,18 @@ const AutoTradePro: React.FC = () => {
                       required
                     />
 
-                    {errors.fullName && touched.fullName && (
+                    {errors.full_name && touched.full_name && (
                       <p className="error text-sm text-red-400">
-                        {errors.fullName}
+                        {errors.full_name}
                       </p>
                     )}
                     {/* <Field
-                          name="fullName"
+                          name="full_name"
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                           placeholder="Enter your name"
                         />
                         <ErrorMessage
-                          name="fullName"
+                          name="full_name"
                           component="div"
                           className="text-red-500 text-sm mt-1"
                         /> */}
@@ -358,17 +399,17 @@ const AutoTradePro: React.FC = () => {
                       ].map(({ value, icon: Icon, label }) => (
                         <label key={value} className="relative">
                           <input
-                            name="contactMethod"
+                            name="contact_method"
                             type="radio"
                             onBlur={handleBlur}
                             placeholder="+234 705 190 0086"
                             // onChange={() => {
                             //   handleChange;
-                            //   console.log(values.contactMethod);
+                            //   console.log(values.contact_method);
                             // }}
                             // className="hidden"
-                            value={values.contactMethod}
-                            // value={values.contactMethod}
+                            value={values.contact_method}
+                            // value={values.contact_method}
                             // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                             // className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                             className="sr-only"
@@ -377,20 +418,20 @@ const AutoTradePro: React.FC = () => {
 
                           {/* <Field
                                 type="radio"
-                                name="contactMethod"
+                                name="contact_method"
                                 value={value}
                                 className="sr-only"
                               /> */}
                           <div
                             className={`flex items-center justify-center space-x-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                              values.contactMethod === value
+                              values.contact_method === value
                                 ? "border-green-500 bg-blue-50 text-green-700"
                                 : "border-gray-200 hover:border-gray-300"
                             }`}
                             onClick={() => {
                               // Set the value manually when clicking the card
                               handleChange({
-                                target: { name: "contactMethod", value },
+                                target: { name: "contact_method", value },
                               });
                             }}
                           >
@@ -521,29 +562,29 @@ const AutoTradePro: React.FC = () => {
                       License Plate (optional)
                     </label>
                     <input
-                      name="licensePlate"
+                      name="license_plate"
                       type="text"
-                      value={values.licensePlate}
+                      value={values.license_plate}
                       onBlur={handleBlur}
                       placeholder="ABC-1234"
                       onChange={handleChange}
                       // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                      required
+                      
                     />
 
-                    {errors.licensePlate && touched.licensePlate && (
+                    {errors.license_plate && touched.license_plate && (
                       <p className="error text-sm text-red-400">
-                        {errors.licensePlate}
+                        {errors.license_plate}
                       </p>
                     )}
                     {/* <Field
-                          name="licensePlate"
+                          name="license_plate"
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                           placeholder="ABC-1234"
                         />
                         <ErrorMessage
-                          name="licensePlate"
+                          name="license_plate"
                           component="div"
                           className="text-red-500 text-sm mt-1"
                         /> */}
@@ -562,7 +603,7 @@ const AutoTradePro: React.FC = () => {
                       onChange={handleChange}
                       // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                      required
+                      
                     />
 
                     {errors.vin && touched.vin && (
@@ -581,14 +622,14 @@ const AutoTradePro: React.FC = () => {
                     </label>
                     <input
                       name="mileage"
-                      type="text"
+                      type="number"
                       value={values.mileage}
                       onBlur={handleBlur}
                       placeholder="18,200"
                       onChange={handleChange}
                       // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                      required
+                      
                     />
 
                     {errors.mileage && touched.mileage && (
@@ -685,16 +726,16 @@ const AutoTradePro: React.FC = () => {
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  {RequestType.map(({ value, icon: Icon, label, desc }) => (
+                  {request_type.map(({ value, icon: Icon, label, desc }) => (
                     <label key={value} className="relative">
                       <input
-                        name="requestType"
+                        name="request_type"
                         type="radio"
                         value={value}
                         onBlur={handleBlur}
                         onChange={() => {
                           // handleChange;
-                          console.log(values.requestType);
+                          console.log(values.request_type);
                         }}
                         // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                         className=" sr-only"
@@ -702,34 +743,34 @@ const AutoTradePro: React.FC = () => {
                         required
                       />
 
-                      {errors.requestType && touched.requestType && (
+                      {errors.request_type && touched.request_type && (
                         <p className="error text-sm text-red-400">
-                          {errors.requestType}
+                          {errors.request_type}
                         </p>
                       )}
 
                       {/* <Field
                             type="radio"
-                            name="requestType"
+                            name="request_type"
                             value={value}
                             className="sr-only"
                           /> */}
                       <div
                         className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                          values.requestType === value
+                          values.request_type === value
                             ? "border-green-500 bg-blue-50"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
                         onClick={() => {
                           // Set the value manually when clicking the card
                           handleChange({
-                            target: { name: "requestType", value },
+                            target: { name: "request_type", value },
                           });
                         }}
                       >
                         <Icon
                           className={`w-8 h-8 mx-auto mb-3 ${
-                            values.requestType === value
+                            values.request_type === value
                               ? "text-green-600"
                               : "text-gray-400"
                           }`}
@@ -748,7 +789,7 @@ const AutoTradePro: React.FC = () => {
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Describe the issue, noises, warning lights, or service
-                    needed
+                    needed <span className="text-sm text-red-500">*</span>
                   </label>
                   <textarea
                     name="description"
@@ -800,9 +841,9 @@ const AutoTradePro: React.FC = () => {
                       Preferred Date
                     </label>
                     <input
-                      name="preferredDate"
+                      name="preferred_date"
                       type="date"
-                      value={values.preferredDate}
+                      value={values.preferred_date}
                       onBlur={handleBlur}
                       onChange={handleChange}
                       // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
@@ -810,18 +851,18 @@ const AutoTradePro: React.FC = () => {
                       required
                     />
 
-                    {errors.preferredDate && touched.preferredDate && (
+                    {errors.preferred_date && touched.preferred_date && (
                       <p className="error text-sm text-red-400">
-                        {errors.preferredDate}
+                        {errors.preferred_date}
                       </p>
                     )}
                     {/* <Field
-                          name="preferredDate"
+                          name="preferred_date"
                           type="date"
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                         />
                         <ErrorMessage
-                          name="preferredDate"
+                          name="preferred_date"
                           component="div"
                           className="text-red-500 text-sm mt-1"
                         /> */}
@@ -838,37 +879,37 @@ const AutoTradePro: React.FC = () => {
                       ].map(({ value, label }) => (
                         <label key={value} className="relative">
                           <input
-                            name="preferredTime"
+                            name="preferred_time"
                             type="radio"
-                            value={values.preferredTime}
+                            value={values.preferred_time}
                             onBlur={handleBlur}
                             // onChange={handleChange}
                             // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                             // className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                             className=" sr-only"
-                            required
+                            
                           />
 
-                          {errors.preferredTime && touched.preferredTime && (
+                          {errors.preferred_time && touched.preferred_time && (
                             <p className="error text-sm text-red-400">
-                              {errors.preferredTime}
+                              {errors.preferred_time}
                             </p>
                           )}
                           {/* <Field
                                 type="radio"
-                                name="preferredTime"
+                                name="preferred_time"
                                 value={value}
                                 className="sr-only"
                               /> */}
                           <div
                             className={`p-4 rounded-xl border-2 cursor-pointer transition-all text-center ${
-                              values.preferredTime === value
+                              values.preferred_time === value
                                 ? "border-green-500 bg-blue-50 text-green-700"
                                 : "border-gray-200 hover:border-gray-300"
                             }`}
                             onClick={() => {
                               handleChange({
-                                target: { name: "preferredTime", value },
+                                target: { name: "preferred_time", value },
                               });
                             }}
                           >
@@ -894,7 +935,7 @@ const AutoTradePro: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   {[
                     {
-                      value: "shop",
+                      value: "dropoff",
                       icon: Home,
                       label: "Shop Drop-off",
                       desc: "Bring to our location",
@@ -915,9 +956,9 @@ const AutoTradePro: React.FC = () => {
                     <label key={value} className="relative">
                       
                       <input
-                            name="serviceMethod"
+                            name="service_method"
                             type="radio"
-                            value={values.serviceMethod}
+                            value={values.service_method}
                             onBlur={handleBlur}
                             // onChange={handleChange}
                             // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
@@ -926,21 +967,21 @@ const AutoTradePro: React.FC = () => {
                             required
                           />
 
-                          {errors.serviceMethod && touched.serviceMethod && (
+                          {errors.service_method && touched.service_method && (
                             <p className="error text-sm text-red-400">
-                              {errors.serviceMethod}
+                              {errors.service_method}
                             </p>
                           )}
                       
                       {/* <Field
                             type="radio"
-                            name="serviceMethod"
+                            name="service_method"
                             value={value}
                             className="sr-only"
                           /> */}
                       <div
                         className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                          values.serviceMethod === value
+                          values.service_method === value
                             ? "border-green-500 bg-blue-50"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
@@ -948,13 +989,13 @@ const AutoTradePro: React.FC = () => {
                         
                             onClick={() => {
                               handleChange({
-                                target: { name: "serviceMethod", value },
+                                target: { name: "service_method", value },
                               });
                             }}
                       >
                         <Icon
                           className={`w-8 h-8 mx-auto mb-3 ${
-                            values.serviceMethod === value
+                            values.service_method === value
                               ? "text-green-600"
                               : "text-gray-400"
                           }`}
@@ -970,19 +1011,39 @@ const AutoTradePro: React.FC = () => {
                   ))}
                 </div>
 
-                {(values.serviceMethod === "tow" ||
-                  values.serviceMethod === "pickup") && (
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Address (if pickup/tow)
-                    </label>
-                    {/* <Field
-                          name="address"
-                          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                          placeholder="Street, City, ZIP"
-                        /> */}
-                  </div>
+                {/* Address */}
+
+                
+                {(values.service_method === "tow" ||
+                  values.service_method === "pickup") && ( 
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Address (if pickup/tow)
+                  </label>
+                  <textarea
+                    name="address"
+                    rows={4}
+                    value={values.address}
+                    onBlur={handleBlur}
+                    // placeholder="Please describe the symptoms or service you need..."
+                    onChange={handleChange}
+                    // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
+                    // className=" sr-only"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    required={values.service_method === "tow" ||
+                  values.service_method === "pickup"}
+                  >
+                    Enter address for pickup or delivery...
+                  </textarea>
+
+                  {errors.address && touched.address && (
+                    <p className="error text-sm text-red-400">
+                      {errors.address}
+                    </p>
+                  )} 
+                </div>
                 )}
+
               </div>
 
               {/* Service Packages */}
@@ -1009,7 +1070,7 @@ const AutoTradePro: React.FC = () => {
                           {pkg.description}
                         </p>
                         <div className="text-2xl font-bold text-green-600">
-                          ${pkg.price}
+                          #{pkg.price}
                         </div>
                         <button
                           type="button"
@@ -1039,7 +1100,7 @@ const AutoTradePro: React.FC = () => {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Service Type:</span>
                     <span className="font-medium capitalize">
-                      {values.requestType || "Not selected"}
+                      {values.request_type || "Not selected"}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -1053,7 +1114,7 @@ const AutoTradePro: React.FC = () => {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Preferred Date:</span>
                     <span className="font-medium">
-                      {values.preferredDate || "Not selected"}
+                      {values.preferred_date || "Not selected"}
                     </span>
                   </div>
                 </div>
@@ -1062,20 +1123,36 @@ const AutoTradePro: React.FC = () => {
                   <div className="flex justify-between text-lg font-bold">
                     <span>Estimated Total:</span>
                     <span className="text-green-600">
-                      ${estimatedTotal.toFixed(2)}
+                      #{estimatedTotal.toFixed(2)}
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
                     *Final pricing confirmed after inspection
                   </p>
                 </div>
+              {!isValid ? <p className="text-red-500 text-xs pb-2 text-center">Kindly upload all necessary information.</p>: ''}
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-green-600 to-indigo-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-green-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+                  className={` ${!isValid  ? 'cursor-no-drop bg-gray-400' : 'bg-gradient-to-r from-green-600 to-indigo-600 hover:scale-105'} w-full   text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-green-700 hover:to-indigo-700 transition-all transform  shadow-lg`}
+                // disabled
+                // onClick={()=>{
+                //   console.log({isValid, isSubmitting}, '\n', values);
+                
+                // }}
+                // onClick={handleSubmit}
+                disabled={!isValid || isSubmitting}
                 >
                   Submit Request
                 </button>
+
+                {/* <button type="submit" 
+                  onClick={handleSubmit}
+                  className="primary__btn w-full"
+                >
+                  {isSubmitting && <i className="pi pi-spin pi-spinner"></i>}
+                  Login
+                </button> */}
 
                 {/* <div className="mt-6 space-y-3 text-sm text-gray-600">
                       <div className="flex items-start space-x-2">
