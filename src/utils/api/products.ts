@@ -25,7 +25,11 @@ const createVehicleRepair = (data:any) => {
 }
 
 const editVehicleRepair = (data:any, id: any) => {
-    return axios.put(`${BASEURL}mains/repair/vehicles/${id}`, data)
+    return axios.put(`${BASEURL}mains/repair/vehicles/${id}/`, data)
+}
+
+const getVehicleRepair = (id: any) => {
+    return axios.get(`${BASEURL}mains/repair/vehicles/${id}/`)
 }
 
 
@@ -37,4 +41,5 @@ export {
     createAVehicleEnquiry,
     createVehicleRepair,
     editVehicleRepair,
+    getVehicleRepair,
 }

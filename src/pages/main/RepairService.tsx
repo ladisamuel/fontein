@@ -21,7 +21,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { repairVAlidation } from "../../utils/validation/validation";
 import { toast } from "react-toastify";
-import { createVehicleRepair, editVehicleRepair } from "../../utils/api/products";
+import { createVehicleRepair, editVehicleRepair, getVehicleRepair } from "../../utils/api/products";
 import { useRecoilState } from "recoil";
 import { repairRequestState } from "../../utils/atom/repairAtom";
 import { Dialog } from "primereact/dialog";
@@ -48,7 +48,6 @@ interface FormValues {
  
 const AutoTradePro: React.FC = () => {
   const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
-  const [estimatedTotal, setEstimatedTotal] = useState(0);
   const [repairData, setRepairData] = useRecoilState(repairRequestState)
   const [requestStatus, setRequestStatus] = useState<string | null>(null);
 
@@ -75,15 +74,6 @@ const AutoTradePro: React.FC = () => {
     },
   ];
 
-  const togglePackage = (packageId: string, price: number) => {
-    if (selectedPackages.includes(packageId)) {
-      setSelectedPackages((prev) => prev.filter((id) => id !== packageId));
-      setEstimatedTotal((prev) => prev - price);
-    } else {
-      setSelectedPackages((prev) => [...prev, packageId]);
-      setEstimatedTotal((prev) => prev + price);
-    }
-  };
 
   const request_type = [
     {
@@ -111,17 +101,20 @@ const AutoTradePro: React.FC = () => {
     console.log("Form submitted:", {
       ...values,
       selectedPackages,
-      estimatedTotal,
     });
     // sdsd
     // console.log('repairData', repairData)
 
     if (repairData) {
+      // const payload = {...values, status: 'pending'}
+      // console.log( payload)
       await editVehicleRepair(values, repairData?.id).then((res)=>{
         console.log(res)
         setRepairData(res.data)
         setRequestStatus('Updated')
         toast.success("Request submitted successfully!");
+      }).catch(()=>{
+        toast.success("Request failed!");
       })
       
     } else {
@@ -130,6 +123,8 @@ const AutoTradePro: React.FC = () => {
         setRepairData(res.data)
         setRequestStatus('Created')
         toast.success("Request submitted successfully!");
+      }).catch(()=>{
+        toast.success("Request failed!");
       })
     }
   };
@@ -169,9 +164,19 @@ const AutoTradePro: React.FC = () => {
     onSubmit,
   });
 
+  const getRepairData = async (id: any) => {
+    await getVehicleRepair(id).then((res)=>{
+      console.log(res)
+    }).catch(err => {
+      if (err.status === 404) {
+        setRepairData(null)
+      }
+
+    })
+  }
   useEffect(()=>{
-    if (repairData) {
-      console.log(repairData)
+    if (repairData?.id) {
+      getRepairData(repairData.id)
     } 
 
   }, [])
@@ -1060,7 +1065,7 @@ const AutoTradePro: React.FC = () => {
                           ? "border-green-500 bg-blue-50"
                           : "border-gray-200 hover:border-gray-300"
                       }`}
-                      onClick={() => togglePackage(pkg.id, pkg.price)}
+                      onClick={() => setSelectedPackages([pkg.id])}
                     >
                       <div className="text-center">
                         <h4 className="font-semibold text-gray-900 mb-2">
@@ -1120,14 +1125,9 @@ const AutoTradePro: React.FC = () => {
                 </div>
 
                 <div className="border-t pt-4 mb-6">
-                  <div className="flex justify-between text-lg font-bold">
-                    <span>Estimated Total:</span>
-                    <span className="text-green-600">
-                      #{estimatedTotal.toFixed(2)}
-                    </span>
-                  </div>
+
                   <p className="text-xs text-gray-500 mt-2">
-                    *Final pricing confirmed after inspection
+                    *Final pricing will be confirmed after inspection
                   </p>
                 </div>
               {!isValid ? <p className="text-red-500 text-xs pb-2 text-center">Kindly upload all necessary information.</p>: ''}
