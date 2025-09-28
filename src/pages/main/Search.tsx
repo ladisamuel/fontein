@@ -377,6 +377,7 @@ const SearchResultsPage: React.FC = () => {
         header="Advance Search"
         visible={visible}
         style={{ width: "90%" }}
+        className="p-5"
         onHide={() => {
           if (!visible) return;
           setVisible(false);

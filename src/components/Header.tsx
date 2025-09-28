@@ -1,6 +1,7 @@
 import menuItem from "../utils/link/menuLinks.json";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import logoImage from "../assets/logo/Logo.jpg"
 export default function Header() {
   const menu = menuItem;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,8 +40,10 @@ export default function Header() {
       <nav className="w-full">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">FR</span>
+            <div className="w-12 h-12 rounded-full flex items-center justify-center">
+              <span className="text-white border font-bold text-lg">
+                <img src={logoImage} className="border" alt="" />
+              </span>
             </div>
             <span className="text-xl font-semibold text-gray-900">
               Fontein Auto Trade
