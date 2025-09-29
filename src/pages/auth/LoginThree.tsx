@@ -42,7 +42,7 @@ const LoginThree: React.FC = () => {
   //           <div className="flex justify-between items-center h-16">
   //             {/* Logo */}
   //             <div className="text-xl font-semibold text-gray-900">
-  //               AutoTradePro
+  //               Fontein Resource Trade
   //             </div>
 
   //             {/* Navigation Links */}

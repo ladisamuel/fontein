@@ -22,7 +22,7 @@ const AboutPage: React.FC = () => {
       //  className="bg-black text-white py-16 rounded-lg mx-4 mt-8 mb-8"
        >
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">About AutoTradePro</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Fontein Resource Trade</h1>
           <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
             Your trusted partner in the automotive trade. We connect buyers and sellers with ease, 
             offering a seamless experience for vehicle transactions and comprehensive services

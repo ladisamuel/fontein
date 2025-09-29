@@ -736,7 +736,7 @@ const SearchResultsPage: React.FC = () => {
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-blue-100 mb-8">
-            Explore our features and see how AutoTradePro can simplify
+            Explore our features and see how Fontein Resource Trade can simplify
             automotive journey.
           </p>
           <button className="bg-white text-blue-500 px-8 py-3 rounded-md hover:bg-gray-100 transition-colors font-semibold">

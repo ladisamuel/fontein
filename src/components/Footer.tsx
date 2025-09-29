@@ -72,15 +72,15 @@ export default function Footer() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Contact</h3>
               <div className="space-y-2 text-gray-300">
-                <p>info@autotradepro.com</p>
-                <p>+1 (555) 123-4567</p>
+                <p>support@fonteingroup.com</p>
+                <p>+234-813-757-9041</p>
               </div>
             </div>
           </div>
 
           {/* Copyright */}
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>© 2024 AutoTradePro. All rights reserved.</p>
+            <p>© 2024 Fontein Resource Trade. All rights reserved.</p>
           </div>
         </div>
       </footer>

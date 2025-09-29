@@ -30,7 +30,7 @@ const FeaturesPage: React.FC = () => {
       }} className="bg-[#00000096] rounded4xl  bg-gradient-to-r from-green-600 to-purple-600 text-white py-20">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Discover AutoTradePro's Powerful Features
+            Discover Fontein Resource Trade's Powerful Features
           </h1>
           <p className="text-lg text-green-100 leading-relaxed max-w-3xl mx-auto">
             From seamless buying and selling to comprehensive repair management and robust 

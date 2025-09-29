@@ -42,11 +42,12 @@ export default function Header() {
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-full flex items-center justify-center">
               <span className="text-white border font-bold text-lg">
-                <img src={logoImage} className="border" alt="" />
+                <img src={logoImage} className="
+                border" alt="" />
               </span>
             </div>
             <span className="text-xl font-semibold text-gray-900">
-              Fontein Auto Trade
+              Fontein Resource
             </span>
           </div>
           <div className="hidden md:flex items-center space-x-8">

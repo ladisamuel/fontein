@@ -15,7 +15,7 @@ const FeaturesPage: React.FC = () => {
       {/* Hero Section */}
       <section className="bg-[rgb(17,128,183)] text-white text-center px-6 py-12">
         <h2 className="text-2xl md:text-3xl font-bold mb-2">
-          Discover AutoTradePro&apos;s Powerful Features
+          Discover Fontein Resource Trade&apos;s Powerful Features
         </h2>
         <p className="max-w-2xl mx-auto">
           From seamless buying and selling to comprehensive repair management and robust admin tools, we&apos;ve got you covered.
@@ -89,7 +89,7 @@ const FeaturesPage: React.FC = () => {
       <section className="bg-[rgb(17,128,183)] text-white text-center px-6 py-12">
         <h3 className="text-xl md:text-2xl font-bold mb-2">Ready to Get Started?</h3>
         <p className="max-w-2xl mx-auto mb-6">
-          Explore our features and see how AutoTradePro can simplify your automotive journey.
+          Explore our features and see how Fontein Resource Trade can simplify your automotive journey.
         </p>
         <button className="bg-white text-[rgb(17,128,183)] font-semibold px-6 py-2 rounded-full hover:bg-gray-100">
           Sign Up Now
@@ -124,13 +124,13 @@ const FeaturesPage: React.FC = () => {
         <div>
           <h4 className="font-semibold mb-2">Contact</h4>
           <ul className="space-y-1">
-            <li>info@autotradepro.com</li>
+            <li>info@Fontein Resource Trade.com</li>
             <li>+1 (555) 123-4567</li>
           </ul>
         </div>
       </footer>
       <div className="bg-[rgb(64,64,64)] text-center text-xs text-gray-400 py-4 border-t border-gray-600">
-        © 2024 AutoTradePro. All rights reserved.
+        © 2024 Fontein Resource Trade. All rights reserved.
       </div>
     </div>
   );
