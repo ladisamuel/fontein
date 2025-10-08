@@ -245,8 +245,6 @@ const VehicleDetailsPage = () => {
         </div>
       </Dialog>
 
-      {/* Header */}
-      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto py-8 main_padding">
