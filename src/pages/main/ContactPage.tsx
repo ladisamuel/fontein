@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Phone, Wrench, HelpCircle, MapPin, Clock, MessageSquare, Send, Car } from 'lucide-react';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 const ContactPage: React.FC = () => {
