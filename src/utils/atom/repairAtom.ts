@@ -45,31 +45,31 @@ const cookieStorage = (keyPrefix = "") => ({
   },
 });
 
-const defaultRepairRequest: RepairInterface = {
-  id: 0,
-  full_name: "",
-  email: "",
-  phone: "",
-  description: "",
-  contact_method: "email", // Assuming 'email' is the default contact method
-  year: "2022", // Default year
-  make: "",
-  model: "",
-  license_plate: "",
-  vin: "",
-  mileage: 0,
-  transmission: "automatic", // Default transmission type
-  request_type: "repair",
-  preferred_date: "",
-  preferred_time: "morning",
-  service_method: "dropoff", // Default service method
-  address: "",
-  selected_packages: null,
-  estimated_total: "0.00",
-  created_at: "",
-  updated_at: "",
-  status: '',
-};
+// const defaultRepairRequest: RepairInterface = {
+//   id: 0,
+//   full_name: "",
+//   email: "",
+//   phone: "",
+//   description: "",
+//   contact_method: "email", // Assuming 'email' is the default contact method
+//   year: "2022", // Default year
+//   make: "",
+//   model: "",
+//   license_plate: "",
+//   vin: "",
+//   mileage: 0,
+//   transmission: "automatic", // Default transmission type
+//   request_type: "repair",
+//   preferred_date: "",
+//   preferred_time: "morning",
+//   service_method: "dropoff", // Default service method
+//   address: "",
+//   selected_packages: null,
+//   estimated_total: "0.00",
+//   created_at: "",
+//   updated_at: "",
+//   status: '',
+// };
 
 export const { persistAtom } = recoilPersist({
   key: "recoil-persist",

@@ -10,7 +10,7 @@ import {
   Users, 
   TrendingUp,
 } from 'lucide-react';
-import Footer from '../../components/Footer';
+
 import { Link } from 'react-router-dom';
 
 // cld
@@ -194,8 +194,7 @@ const FeaturesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
+
       {/* <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto main_padding py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

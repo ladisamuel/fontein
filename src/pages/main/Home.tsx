@@ -9,7 +9,7 @@ import {
 import { getVehicles } from "../../utils/api/products";
 import { Link, useNavigate } from "react-router-dom";
 import type { Vehicles } from "../../utils/type/vehicle";
-import Footer from "../../components/Footer";
+
 import { toast } from "react-toastify";
 
 const AutoTradeWebsite: React.FC = () => {
@@ -270,8 +270,7 @@ const AutoTradeWebsite: React.FC = () => {
       </section>
 
 
-      {/* Footer */}
-      <Footer />
+
     </div>
   );
 };

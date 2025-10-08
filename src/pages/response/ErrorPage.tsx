@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouteError, Link } from "react-router-dom";
 import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError() as any;
@@ -24,7 +24,7 @@ const ErrorPage: React.FC = () => {
         </Link>
       </div>
 
-      <Footer />
+      
     </div>
   );
 };

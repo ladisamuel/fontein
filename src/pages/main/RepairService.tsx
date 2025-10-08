@@ -17,7 +17,7 @@ import {
   Home,
   MapPinX,
 } from "lucide-react";
-import Footer from "../../components/Footer";
+
 import { repairVAlidation } from "../../utils/validation/validation";
 import { toast } from "react-toastify";
 import { createVehicleRepair, editVehicleRepair, getVehicleRepair } from "../../utils/api/products";
@@ -1179,8 +1179,7 @@ const AutoTradePro: React.FC = () => {
         </form>
       </div>
 
-      {/* Footer */}
-      <Footer />
+
     </div>
   );
 };

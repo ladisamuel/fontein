@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import searchData from "../../utils/searchTerms.json";
-import Footer from "../../components/Footer";
+
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -742,8 +742,7 @@ const SearchResultsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
+
     </div>
   );
 };

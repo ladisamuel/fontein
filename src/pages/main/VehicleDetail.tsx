@@ -11,7 +11,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { createAVehicleEnquiry, getAVehicle, searchVehiclesAPI } from "../../utils/api/products";
 import type { Vehicles } from "../../utils/type/vehicle";
-import Footer from "../../components/Footer";
+
 import { Galleria } from "primereact/galleria";
 import { Dialog } from "primereact/dialog";
 
@@ -483,8 +483,7 @@ const VehicleDetailsPage = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <Footer />
+
     </div>
   );
 };

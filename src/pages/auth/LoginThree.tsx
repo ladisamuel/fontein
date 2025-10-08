@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Footer from "../../components/Footer";
+
 
 // Validation Schema
 const LoginSchema = Yup.object().shape({
@@ -190,8 +190,7 @@ const LoginThree: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <Footer />
+
     </div>
   );
 };

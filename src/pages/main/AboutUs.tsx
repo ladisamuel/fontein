@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircle, Eye, Heart } from "lucide-react";
-import Footer from "../../components/Footer";
+
 import { Link } from "react-router-dom";
 
 const AboutPage: React.FC = () => {
@@ -156,8 +156,7 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
+
     </div>
   );
 };

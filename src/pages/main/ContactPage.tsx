@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, Wrench, HelpCircle, MapPin, Clock, MessageSquare, Send, Car } from 'lucide-react';
-import Footer from '../../components/Footer';
+
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -275,11 +275,7 @@ const ContactPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Footer */}
-    <Footer />
-      
+      </div>  
     </div>
   );
 };
