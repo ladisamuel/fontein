@@ -10,7 +10,6 @@ import {
   Users, 
   TrendingUp,
 } from 'lucide-react';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { Link } from 'react-router-dom';
 
@@ -18,10 +17,6 @@ import { Link } from 'react-router-dom';
 const FeaturesPage: React.FC = () => {
   return (
     <div className="min-h-screen mt-[12vh] bg-gray-50">
-      
-            {/* Header */}
-            <Header />
-            
 
       {/* Hero Section */}
       <div className="main_paddin">

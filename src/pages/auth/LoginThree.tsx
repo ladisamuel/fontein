@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 // Validation Schema
@@ -77,8 +76,7 @@ const LoginThree: React.FC = () => {
   return (
     <div className="min-h-screen mt-[12vh] w-full bg-gray-50 flex flex-col">
       {/* Navigation */}
-
-      <Header />
+ 
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center px-4 py-12">

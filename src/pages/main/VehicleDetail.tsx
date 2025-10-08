@@ -8,7 +8,6 @@ import {
   FaPaintRoller,
   FaShieldAlt,
 } from "react-icons/fa";
-import Header from "../../components/Header";
 import { Link, useParams } from "react-router-dom";
 import { createAVehicleEnquiry, getAVehicle, searchVehiclesAPI } from "../../utils/api/products";
 import type { Vehicles } from "../../utils/type/vehicle";

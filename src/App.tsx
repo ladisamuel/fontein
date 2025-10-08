@@ -18,8 +18,7 @@ function App() {
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
-        />
-        {/* <Header /> */}
+        /> 
         {/* <Interceptor   /> */}
         <RouterProvider router={router} />
       </RecoilRoot>

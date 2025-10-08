@@ -10,6 +10,7 @@ import VehicleDetailsPage from '../pages/main/VehicleDetail';
 import Register from '../pages/auth/Register';
 import LoginThree from '../pages/auth/LoginThree';
 import RepairService from '../pages/main/RepairService';
+import ContactPage from '../pages/main/ContactPage';
 
 
 const router = createBrowserRouter([
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
       {
         path: 'about',
         element: <AboutUs />
+      },
+      {
+        path: 'contact-us',
+        element: <ContactPage />
       },
       {
         path: 'features',

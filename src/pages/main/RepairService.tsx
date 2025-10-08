@@ -17,7 +17,6 @@ import {
   Home,
   MapPinX,
 } from "lucide-react";
-import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { repairVAlidation } from "../../utils/validation/validation";
 import { toast } from "react-toastify";
@@ -203,10 +202,7 @@ const AutoTradePro: React.FC = () => {
           <button
           onClick={()=>setRequestStatus(null)} className='btn_primary m-3 px-5 py-2 text-white rounded-xl'>Proceed</button>
 
-        </Dialog>
-      <div className="">
-        <Header />
-      </div>
+        </Dialog> 
 
       {/* Hero Section */}
       <div

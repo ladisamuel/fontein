@@ -1,15 +1,9 @@
 // src/pages/FeaturesPage.tsx
 import React from "react";
-import Header from "../../components/Header";
 
-
-// cht
 const FeaturesPage: React.FC = () => {
   return (
     <div className="font-inter text-[rgb(64,64,64)]">
-          {/* Header */}
-          <Header />
-          
 
 
       {/* Hero Section */}

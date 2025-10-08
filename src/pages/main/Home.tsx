@@ -5,7 +5,7 @@ import {
   Wrench,
   Users,
 } from "lucide-react";
-import Header from "../../components/Header";
+
 import { getVehicles } from "../../utils/api/products";
 import { Link, useNavigate } from "react-router-dom";
 import type { Vehicles } from "../../utils/type/vehicle";
@@ -63,10 +63,7 @@ const AutoTradeWebsite: React.FC = () => {
   }, []);
   return (
     <div className="minh-screen bg-white">
-      {/* Header */}
-      {/* <div className="z-50 w-full shadow-xl fixed top-0"> */}
-      <Header />
-      {/* </div> */}
+
 
       {/* Hero Section */}
       <section className="relative  mt-[12vh] bg-gradient-to-r from-gray-900 to-gray-700 text-white ">
@@ -109,7 +106,7 @@ const AutoTradeWebsite: React.FC = () => {
             </h2>
             <p
             onClick={() => navigate('/search')}
-              className="text-green-600 hover:text-green-700 font-semibold"
+              className="text-green-600 hover:text-green-700 cursor-pointer font-semibold"
             >
               See All Listings →
             </p>

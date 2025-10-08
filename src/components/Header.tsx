@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <header
       className={`${
-        top ? "shadow-2xl bg-red-400" : "shadow-none "
+        top ? "shadow-2xl " : "shadow-none "
       } main_padding h-[12vh] bg-white my-auto w-full z-50 fixed flex items-center top-0 transition-all `}
     >
       <nav className="w-full">

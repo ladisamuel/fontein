@@ -1,7 +1,6 @@
 // import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import Header from "../../components/Header";
 import searchData from "../../utils/searchTerms.json";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -384,9 +383,7 @@ const SearchResultsPage: React.FC = () => {
         }}
       >
         <AdvanceSearch />
-      </Dialog>
-      {/* Header */}
-      <Header />
+      </Dialog> 
  
       {/* Search Results Header */}
       <section 

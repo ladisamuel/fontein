@@ -24,7 +24,7 @@ body {
 }
 
 .main_padding{
-    @apply px-4 sm:px-6 lg:px-26;
+    @apply px-4 sm:px-6 lg:px-[150px];
 }
 
 .btn_primary {
