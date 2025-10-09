@@ -1,21 +1,17 @@
 import { recoilPersist } from 'recoil-persist';
 import Cookies from 'js-cookie';
 import { atom } from 'recoil';
+import type { AuthType, UserType } from '../type/userType';
 // import { cookieStorage } from './recoilCookiesStorage';
 
+ 
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
-export interface AuthState {
-  accessToken: string | null;
-  refreshToken: string | null;
-  user: User | null;
-  isAuthenticated: boolean;
-}
+// export interface AuthState {
+//   accessToken: string | null;
+//   refreshToken: string | null;
+//   user: UserType | null;
+//   // isAuthenticated: boolean;
+// }
 
 
 
@@ -42,21 +38,27 @@ export const { persistAtom } = recoilPersist({
   storage: cookieStorage('auth_'), // Optional prefix
 });
 
-export const accessTokenState = atom<string | null>({
-  key: 'accessTokenState',
+// export const accessTokenState = atom<string | null>({
+//   key: 'accessTokenState',
+//   default: null,
+//   effects_UNSTABLE: [persistAtom],
+// });
+
+// export const refreshTokenState = atom<string | null>({
+//   key: 'refreshTokenState',
+//   default: null,
+//   effects_UNSTABLE: [persistAtom],
+// });
+
+export const authState = atom<AuthType | null>({
+  key: 'authState',
   default: null,
   effects_UNSTABLE: [persistAtom],
 });
 
-export const refreshTokenState = atom<string | null>({
-  key: 'refreshTokenState',
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
 
-
-// User
-export const userState = atom<User | null>({
+// UserType
+export const userState = atom<UserType | null>({
   key: 'userState',
   default: null,
   effects_UNSTABLE: [persistAtom],

@@ -3,31 +3,19 @@ import { useRecoilValue } from "recoil";
 import { authState } from "../../utils/atom/authAtom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
+import ScrollButtons from "../../components/ScrollButtons";
 
-export default function AuthLayout() {
+export default function UserLayout() {
   const auth = useRecoilValue(authState);
-
-  console.log("auth", auth);
-
-  const checkAuth = () => {
-    if (auth !== null && auth?.user?.email) {
-      toast.info("You are already logged in!");
-    }
-  };
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   return (
     <div>
+      
+          <div className="fixed wfit z-50 bottom-5 right-5 ">
+            <ScrollButtons />
+          </div>
       {/* {auth?.access && user.email === 'customer' ? ( */}
       {auth !== null && auth?.user?.email !== null ? (
-        <Navigate to="/user/dashboard" />
-        
-      ) : (
-        // <Navigate to="/user/dashboard" />
         <div className="">
           {/* <div className="mt-[10vh] p-20 bg-red-600"></div> */}
           <Header />
@@ -35,6 +23,8 @@ export default function AuthLayout() {
           <Outlet />
           <Footer />
         </div>
+      ) : (
+        <Navigate to="/auth/login" />
       )}
 
       {/* <Outlet /> */}

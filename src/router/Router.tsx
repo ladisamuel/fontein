@@ -11,6 +11,9 @@ import Register from '../pages/auth/Register';
 import LoginThree from '../pages/auth/LoginThree';
 import RepairService from '../pages/main/RepairService';
 import ContactPage from '../pages/main/ContactPage';
+import Dashboard from '../pages/main/authorised/Dashboard';
+import AuthLayout from './layouts/AuthLayout';
+import UserLayout from './layouts/UserLayout';
 
 
 const router = createBrowserRouter([
@@ -80,7 +83,7 @@ const router = createBrowserRouter([
   //     // }, 
   //   ]
   // }
-
+  
   {
     path: '/',
     element: <PagesLayout  />,
@@ -118,16 +121,37 @@ const router = createBrowserRouter([
         path: 'product/:id/:slug',
         element: <VehicleDetailsPage />
       },
+    ]
+  },
+  
+  {
+    path: '/user',
+    element: <UserLayout  />,
+    errorElement: <ErrorPage />,
+    children: [ 
       {
-        path: 'auth/register',
+        path: 'dashboard',
+        element: <Dashboard />
+      },
+    ]
+  },
+  
+  {
+    path: '/auth',
+    element: <AuthLayout  />,
+    errorElement: <ErrorPage />,
+    children: [ 
+      {
+        path: 'register',
         element: <Register />
       },
       {
-        path: 'auth/login',
+        path: 'login',
         element: <LoginThree />
       },
     ]
   },
+
 ]);
 
 export default router;

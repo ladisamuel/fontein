@@ -1,25 +1,39 @@
-import {atom, selector} from 'recoil'
-import {recoilPersist} from 'recoil-persist'
-
-const {persistAtom} = recoilPersist({
-    key: 'recoil-persist',
-    storage: sessionStorage
-
-})
-
-export const favoriteState = atom({
-    key: 'favorite',
-    default: [],
-    effects_UNSTABLE: [persistAtom]
-})
 
 
-export const getFavorite = selector({
-    key: 'favoriteState',
-    get: ({ get }) => {
-        // Define how to derive the state or perform computation
-        const favoriteData = get(favoriteState);
-       // Access other recoil atoms/selectors using `get`
-        return favoriteData?.map((res: any)=> res?.price).reduce((a: any,b: any)=> a+b, 0)
-      },
-})
+
+
+import { recoilPersist } from "recoil-persist";
+import Cookies from "js-cookie";
+import { atom } from "recoil";
+import type { Vehicles } from '../type/vehicle'
+// import { cookieStorage } from './recoilCookiesStorage';
+ 
+
+const cookieStorage = (keyPrefix = "") => ({
+  setItem: (key: string, value: string) => {
+    Cookies.set(`${keyPrefix}${key}`, value, {
+      expires: 30, // ⬅️ All cookies now expire in 30 days
+      secure: true,
+      sameSite: "strict",
+    });
+  },
+  getItem: (key: string) => {
+    return Cookies.get(`${keyPrefix}${key}`) || null;
+  },
+  removeItem: (key: string) => {
+    Cookies.remove(`${keyPrefix}${key}`);
+  },
+});
+ 
+export const { persistAtom } = recoilPersist({
+  key: "recoil-persist",
+  storage: cookieStorage("cart_"),
+});
+
+export const cartState = atom<string[]>({
+  key: "cart",
+  default: [],
+  // default: defaultRepairRequest,
+  effects_UNSTABLE: [persistAtom],
+});
+

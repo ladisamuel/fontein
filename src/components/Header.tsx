@@ -1,32 +1,49 @@
 import menuItem from "../utils/link/menuLinks.json";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import logoImage from "../assets/logo/Logo.jpg"
+import { useEffect, useRef, useState } from "react";
+import logoImage from "../assets/logo/Logo.jpg";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../utils/atom/authAtom";
+
 export default function Header() {
   const menu = menuItem;
+  const [auth, setAuth] = useRecoilState(authState);
+
+  const popupRef = useRef<HTMLDivElement | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [top, setTop] = useState(false);
+  const [accountDropDownisOpen, setAccountDropDownIsOpen] = useState(false);
 
-  // px-4 sm:px-6 lg:px-26
+    const togglePopup = () => {
+      console.log('toggle popup', accountDropDownisOpen)
+    setAccountDropDownIsOpen(!accountDropDownisOpen);
+  };
+
+    const handleClickOutside = (e: any) => {
+    if (popupRef.current && !popupRef.current.contains(e.target)) {
+      setAccountDropDownIsOpen(false);
+    }
+  };
+
+   useEffect(() => {
+    if (accountDropDownisOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup event listener when component unmounts or accountDropDownisOpen changes
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [accountDropDownisOpen]);
 
   useEffect(() => {
     const scrollHandler = () => {
       window.scrollY > 10 ? setTop(true) : setTop(false);
     };
     window.addEventListener("scroll", scrollHandler);
-
-    // if (auth && auth.access) {
-    //   const getNotification = async () => {
-    //     await allNotifications().then((res: any) => {
-    //       setNotification(res.data.data);
-    //       console.log(notification);
-
-    //     });
-    //   };
-
-    //   getNotification();
-    // }
 
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [top]);
@@ -42,8 +59,12 @@ export default function Header() {
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-full flex items-center justify-center">
               <span className="text-white border font-bold text-lg">
-                <img src={logoImage} className="
-                border" alt="" />
+                <img
+                  src={logoImage}
+                  className="
+                border"
+                  alt=""
+                />
               </span>
             </div>
             <span className="text-xl font-semibold text-gray-900">
@@ -67,6 +88,31 @@ export default function Header() {
                   )}
                   {item.text}
                 </Link>
+              ) : auth ? (
+                <div key={index} className="relative">
+                  <i
+                  onClick={togglePopup}
+                    className={`pi pi-user hover:bg-green-100 cursor-pointer p-2 text-gray-500 text-sm rounded-lg border border-gray-200 transition-all`}
+                  ></i>
+                  {accountDropDownisOpen && 
+                  <div ref={popupRef} className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
+                    <ul className="textxs flex flex-col text-gray-500 py-1 rounded-xl">
+                      <li className=" px-1 ">
+                        <div className="border px-1 border-gray-200 rounded   ">
+                          <p className="text-gray-800 text-xs">{auth.user.username}</p>
+                          <p className="text-gray800 text-xs">{auth.user.email}</p>
+                        </div>
+                      </li>
+                      <Link to='/user/dashboard' className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 mt-1 "><i className="pi pi-sitemap" ></i> My Dashboard</Link>
+                      <Link to='' className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 "><i className="pi pi-user-edit" ></i>Account Settings</Link>
+                      <li className=" px-2 ">
+                        <hr className="border-gray-200" />
+                      </li>
+                      <li onClick={()=>setAuth(null)} className="flex justify-center text-xs gap-1 items-center text-red-500 bordert hover:bg-red-50 cursor-pointer py-2 px-2 ">Sign out</li>
+                    </ul>
+                  </div>
+                  }
+                </div>
               ) : (
                 <Link key={index} to={item.link}>
                   <button className=" btn_primary text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors">
@@ -75,16 +121,6 @@ export default function Header() {
                 </Link>
               )
             )}
-
-            {/* <a href="#" className="text-gray-700 hover:text-gray-900">About</a>
-              <div className="relative">
-              </div>
-              <button className="flex items-center text-gray-700 hover:text-gray-900">
-              Features
-              <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              <a href="#" className="text-gray-700 hover:text-gray-900">Contact Us</a>
-               */}
           </div>
           <div className="md:hidden">
             {/* Mobile menu button */}

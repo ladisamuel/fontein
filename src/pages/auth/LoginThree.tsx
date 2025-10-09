@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useFormik } from "formik";
+import { loginUserValidation } from "../../utils/validation/validation";
+import { loginUser } from "../../utils/api/userAPI";
+import { toast } from "react-toastify"; 
+import { Link, useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { authState } from "../../utils/atom/authAtom";
 
 
 // Validation Schema
-const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
-});
 
 // Types
 interface LoginFormValues {
@@ -20,20 +17,53 @@ interface LoginFormValues {
 }
 
 const LoginThree: React.FC = () => {
+  const navigate = useNavigate()
+  const auth = useSetRecoilState(authState)
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const initialValues: LoginFormValues = {
-    email: "samuel.ladi2014@gmail.com",
-    password: "",
-  };
 
-  const handleSubmit = async (values: LoginFormValues) => {
+
+
+  const onSubmit = async (values: LoginFormValues) => {
     setIsLoading(true);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await loginUser(values).then((res)=>{
+      console.log('res in login', res.data )
+        toast.success('Login successfully')
+        auth(res?.data)
+        navigate('/user/dashboard')
+    }).catch((err)=>{
+      if (err) {
+        toast.error('Login failed')
+      }
+    })
     console.log("Login submitted:", values);
     setIsLoading(false);
   };
+
+
+  const initialValues: LoginFormValues = {
+    email: "",
+    password: "",
+  };
+
+   
+
+    const {
+      values,
+      errors,
+      isValid,
+      isSubmitting,
+      touched,
+      handleBlur,
+      handleChange,
+      handleSubmit,
+    } = useFormik({
+      validateOnMount: true,
+      initialValues: initialValues,
+      validationSchema: loginUserValidation,
+      onSubmit,
+    });
 
   //   /**
   //       <nav className="bg-white shadow-sm">
@@ -91,64 +121,62 @@ const LoginThree: React.FC = () => {
             </div>
 
             {/* Form */}
-            <Formik
-              initialValues={initialValues}
-              validationSchema={LoginSchema}
-              onSubmit={handleSubmit}
-            >
-              {({ errors, touched, isValid, handleSubmit: formikSubmit }) => (
+
+        <form onSubmit={handleSubmit} className="space-y-8">
+                
                 <div className="space-y-6">
+
                   {/* Email Field */}
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Email
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Email <span className="text-sm text-red-500">*</span>
                     </label>
-                    <Field
-                      id="email"
+
+                    <input
                       name="email"
                       type="email"
-                      className={`w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-all duration-200 ${
-                        errors.email && touched.email
-                          ? "ring-2 ring-red-500 bg-red-50"
-                          : ""
-                      }`}
+                      value={values.email}
+                      onBlur={handleBlur}
+                      placeholder="name@email.com"
+                      onChange={handleChange}
+                      // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2  outline-none focus:ring-green-500 focus:border-transparent transition-all"
+                      required
                     />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
 
+                    {errors.email && touched.email && (
+                      <p className="error text-sm text-red-400">
+                        {errors.email}
+                      </p>
+                    )}  
+                  </div>
+                  
                   {/* Password Field */}
                   <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Password
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Password <span className="text-sm text-red-500">*</span>
                     </label>
-                    <Field
-                      id="password"
+
+                    <input
                       name="password"
                       type="password"
-                      placeholder="••••••••••••"
-                      className={`w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-all duration-200 ${
-                        errors.password && touched.password
-                          ? "ring-2 ring-red-500 bg-red-50"
-                          : ""
-                      }`}
+                      value={values.password}
+                      onBlur={handleBlur}
+                      placeholder="********"
+                      onChange={handleChange}
+                      // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none focus:ring-green-500 focus:border-transparent transition-all"
+                      required
                     />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+
+                    {errors.password && touched.password && (
+                      <p className="error text-sm text-red-400">
+                        {errors.password}
+                      </p>
+                    )}  
                   </div>
 
+                   
                   {/* Forgot Password Link */}
                   <div className="text-right">
                     <a
@@ -161,9 +189,8 @@ const LoginThree: React.FC = () => {
 
                   {/* Login Button */}
                   <button
-                    type="button"
-                    onClick={() => formikSubmit()}
-                    disabled={!isValid || isLoading}
+                    type="submit"
+                    disabled={!isValid || isLoading || isSubmitting}
                     className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     {isLoading ? (
@@ -173,18 +200,18 @@ const LoginThree: React.FC = () => {
                     )}
                   </button>
                 </div>
-              )}
-            </Formik>
+              </form>
+                 
 
             {/* Register Link */}
             <div className="mt-8 text-center">
               <span className="text-gray-600">Don't have an account? </span>
-              <a
-                href="#"
+              <Link
+                to="/auth/register"
                 className="text-green-500 hover:text-green-600 font-medium transition-colors duration-200"
               >
                 Register
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -32,6 +32,10 @@ const getVehicleRepair = (id: any) => {
     return axios.get(`${BASEURL}mains/repair/vehicles/${id}/`)
 }
 
+const contactFormApi = (data:any) => {
+    return axios.post(`${BASEURL}mains/contact/`, data)
+}
+
 
 
 export {
@@ -42,4 +46,6 @@ export {
     createVehicleRepair,
     editVehicleRepair,
     getVehicleRepair,
+    contactFormApi,
 }
+

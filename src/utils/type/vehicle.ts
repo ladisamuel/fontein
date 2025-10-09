@@ -14,7 +14,7 @@ interface VehiclesImage {
 interface Vehicles {
   condition: string;
   description: string;
-  id: number;
+  id: number | string;
   images: VehiclesImage[];
   make: string;
   mileage: number;
@@ -25,8 +25,18 @@ interface Vehicles {
   first_image: string;
 }
 
+interface ContactFormType {
+    full_name: string;
+    email: string;
+    phone: string;
+    subject: string;
+    message: string;
+}
+
 export type {
     Make,
     VehiclesImage,
     Vehicles,
+    ContactFormType,
 }
+

@@ -9,11 +9,19 @@ import {
   FaShieldAlt,
 } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-import { createAVehicleEnquiry, getAVehicle, searchVehiclesAPI } from "../../utils/api/products";
+import {
+  createAVehicleEnquiry,
+  getAVehicle,
+  searchVehiclesAPI,
+} from "../../utils/api/products";
 import type { Vehicles } from "../../utils/type/vehicle";
 
 import { Galleria } from "primereact/galleria";
 import { Dialog } from "primereact/dialog";
+import { useRecoilState } from "recoil";
+import { cartState } from "../../utils/atom/cartAtom";
+import { useFavoriteVehicle } from "../../utils/hooks/useFavoriteVehicle";
+import { toast } from "react-toastify";
 
 const VehicleDetailsPage = () => {
   const galleria: any = useRef(null);
@@ -22,7 +30,9 @@ const VehicleDetailsPage = () => {
   const [otherVehicles, setOtherVehicles] = useState<Vehicles[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [inquiry, setInquiry] = useState<any>({});
-  const [loading, setLoading] = useState<any>({})
+  const [loading, setLoading] = useState<any>({});
+  const { addVehicleToFavorite, removeVehicleFromFavorite, isFavorite } =
+    useFavoriteVehicle();
 
   const params = useParams();
   // const id = params.slug?.split("-")[0];
@@ -63,26 +73,37 @@ const VehicleDetailsPage = () => {
   };
 
   const submitEnquiry = async () => {
-    setLoading({...loading, submitEnquiry: true})
+    setLoading({ ...loading, submitEnquiry: true });
     console.log(inquiry);
     const payload = {
       ...inquiry,
       vehicle: id,
-    }
+    };
 
-    // console.log(payload);
-    // setTimeout(() => {
-    //   console.log(payload);
-    // }, 5000);
-    // console.log('after settime out');
-    
-    await createAVehicleEnquiry(payload).then((res)=>{
-      console.log(res);
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-      setLoading({...loading, submitEnquiry: false})
+    await createAVehicleEnquiry(payload)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setLoading({ ...loading, submitEnquiry: false });
+  };
+
+  const carId = () => {
+    const id =
+      typeof carItem?.id === "string" ? carItem?.id : String(carItem?.id);
+    return id;
+  };
+
+  const handleFavorite = () => {
+    if (isFavorite(carId())) {
+      removeVehicleFromFavorite(carId());
+      toast.info("Removed from favorite");
+    } else {
+      addVehicleToFavorite(carId());
+      toast.success("Added to favorite");
+    }
   };
 
   useEffect(() => {
@@ -144,107 +165,109 @@ const VehicleDetailsPage = () => {
             </p>
           </div>
           <div className="p-3">
-            {loading?.submitEnquiry ? 
-            <div className="">
-              <div className="w-full h-[200px] flex items-center justify-center">
-                <i className="pi pi-spinner pi-spin text-6xl text-green-600 "></i>
+            {loading?.submitEnquiry ? (
+              <div className="">
+                <div className="w-full h-[200px] flex items-center justify-center">
+                  <i className="pi pi-spinner pi-spin text-6xl text-green-600 "></i>
+                </div>
               </div>
-            </div>
-            : 
-            <div className="transition-all ease-in-out duration-300">
-              {/* <input type="text" placeholder="Enter your name:" />
+            ) : (
+              <div className="transition-all ease-in-out duration-300">
+                {/* <input type="text" placeholder="Enter your name:" />
               <input type="text" placeholder="Enter your email:" />
               <input type="text" placeholder="Enter your phone number:" /> */}
 
-              <div>
-                <div className="relative flex flex-col borde h-12 mt-8 ">
-                  <label
-                    className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
-                    required
-                    value={inquiry?.name}
-                    onChange={(e) => {
-                      setInquiry({ ...inquiry, name: e.target.value });
-                    }}
-                  />
+                <div>
+                  <div className="relative flex flex-col borde h-12 mt-8 ">
+                    <label
+                      className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
+                      required
+                      value={inquiry?.name}
+                      onChange={(e) => {
+                        setInquiry({ ...inquiry, name: e.target.value });
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div className="relative borde h-12 mt-8 ">
-                  <label
-                    className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
-                    required
-                    value={inquiry.email}
-                    onChange={(e) => {
-                      setInquiry({ ...inquiry, email: e.target.value });
-                    }}
-                  />
+                <div>
+                  <div className="relative borde h-12 mt-8 ">
+                    <label
+                      className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
+                      required
+                      value={inquiry.email}
+                      onChange={(e) => {
+                        setInquiry({ ...inquiry, email: e.target.value });
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <div className="relative borde h-12 mt-8 ">
-                  <label
-                    className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
-                  >
-                    Phone number
-                  </label>
-                  <input
-                    type="text"
-                    name="phone"
-                    className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
-                    required
-                    value={inquiry.phone}
-                    onChange={(e) => {
-                      setInquiry({ ...inquiry, phone: e.target.value });
-                    }}
-                  />
+                <div>
+                  <div className="relative borde h-12 mt-8 ">
+                    <label
+                      className={` ease-in-out text-xs font-bold text-gray-500 uppercase`}
+                    >
+                      Phone number
+                    </label>
+                    <input
+                      type="text"
+                      name="phone"
+                      className="absolut top-0 left-15 h-8 bg-green-200 text-sm w-[100%] border-green-200 rounded border -b py-3 focus:ring-0 focus:ring-orange-100 focus:outline-0"
+                      required
+                      value={inquiry.phone}
+                      onChange={(e) => {
+                        setInquiry({ ...inquiry, phone: e.target.value });
+                      }}
+                    />
+                  </div>
                 </div>
+
+                {/* delivery_option Checkbox */}
+                <div className="flex items-center my-5 mb-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    value={inquiry.delivery_option}
+                    checked={inquiry.delivery_option}
+                    onChange={updateRememberMe}
+                    className="h-4 w-4 bg-green-600 text-green-600 border-gray-300 rounded focus:ring-green-600"
+                  />
+                  <label
+                    htmlFor="remember"
+                    className="ml-2 block text-gray-700"
+                  >
+                    I want delivery
+                  </label>
+                </div>
+
+                <button
+                  onClick={submitEnquiry}
+                  className="mt-8 btn_primary text-white px-10 py-2 rounded-lg"
+                >
+                  Submit
+                </button>
+
+                {/* Password Field */}
+                <div></div>
               </div>
-
-              {/* delivery_option Checkbox */}
-              <div className="flex items-center my-5 mb-2">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  value={inquiry.delivery_option}
-                  checked={inquiry.delivery_option}
-                  onChange={updateRememberMe}
-                  className="h-4 w-4 bg-green-600 text-green-600 border-gray-300 rounded focus:ring-green-600"
-                />
-                <label htmlFor="remember" className="ml-2 block text-gray-700">
-                  I want delivery
-                </label>
-              </div>
-
-              <button
-                onClick={submitEnquiry}
-                className="mt-8 btn_primary text-white px-10 py-2 rounded-lg"
-              >
-                Submit
-              </button>
-
-              {/* Password Field */}
-              <div></div>
-            </div>
-            }
+            )}
           </div>
         </div>
       </Dialog>
-
 
       {/* Main Content */}
       <main className="container mx-auto py-8 main_padding">
@@ -306,9 +329,9 @@ const VehicleDetailsPage = () => {
                         {imgEl}
                       </div>
                     );
-                  })} 
+                  })}
 
-                 {/* 
+                {/* 
                   {carItem?.images?.length > 3 ? 
                   <div
                                           onClick={() => {
@@ -319,7 +342,6 @@ const VehicleDetailsPage = () => {
                          </div>
                   :''}
                  */}
-
               </div>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -405,8 +427,15 @@ const VehicleDetailsPage = () => {
                       <i className="pi pi-cart-plus"></i>
                       <span>Instant Buy</span>
                     </div>
-                    <div className="bg-yellow-600 p-2 flex items-center justify-center gap-3 rounded text-white">
-                      <i className="pi pi-heart-fill"></i>
+                    <div
+                      onClick={handleFavorite}
+                      className="bg-yellow-600 p-2 flex items-center justify-center gap-3 rounded text-white"
+                    >
+                      <i
+                        className={`pi ${
+                          isFavorite(carId()) ? "pi-heart-fill" : "pi-heart"
+                        } `}
+                      ></i>
                       <span>Favourite</span>
                     </div>
                   </div>
@@ -453,9 +482,17 @@ const VehicleDetailsPage = () => {
                     <i className="pi pi-cart-plus"></i>
                     <span>Instant Buy</span>
                   </div>
-                  <div className="bg-yellow-600 hover:bg-yellow-500 transition-all duration-300 p-2 flex items-center justify-center gap-3 rounded text-white">
-                    <i className="pi pi-heart-fill"></i>
+                  <div
+                    onClick={handleFavorite}
+                    className="bg-yellow-600 hover:bg-yellow-500 transition-all duration-300 p-2 flex items-center justify-center gap-3 rounded text-white"
+                  >
+                    <i
+                      className={`pi ${
+                        isFavorite(carId()) ? "pi-heart-fill" : "pi-heart"
+                      } `}
+                    ></i>
                     <span>Favourite</span>
+                    {/* {isFavorite(carItem.id)} */}
                   </div>
                 </div>
               </div>
@@ -482,8 +519,6 @@ const VehicleDetailsPage = () => {
           </div>
         </div>
       </main>
-
-
     </div>
   );
 };
@@ -514,28 +549,55 @@ const FeatureItem = ({ feature }: { feature: string }) => (
   </div>
 );
 
-const SimilarVehicle = ({ car }: any) => (
-  //   key={car?.id}
-  <div className="border-b border-gray-200 pb-4 last:border-0 last:pb-0 grid grid-cols-[3fr_9fr] gap-3">
-    <div className="">
-      <img src={car?.first_image} className="rounded" alt="" />
+const SimilarVehicle = ({ car }: any) => {
+  const { addVehicleToFavorite, removeVehicleFromFavorite, isFavorite } =
+    useFavoriteVehicle();
+
+  const carId = () => {
+    const id = typeof car?.id === "string" ? car?.id : String(car?.id);
+    return id;
+  };
+
+  const handleFavorite = () => {
+    if (isFavorite(carId())) {
+      removeVehicleFromFavorite(carId());
+      toast.info("Removed from favorite");
+    } else {
+      addVehicleToFavorite(carId());
+      toast.success("Added to favorite");
+    }
+  };
+  return (
+    <div className="border-b border-gray-200 pb-4 last:border-0 last:pb-0 grid grid-cols-[3fr_9fr] gap-3">
+      <div className="">
+        <img src={car?.first_image} className="rounded" alt="" />
+      </div>
+      <div className="">
+        <h3 className="font-semibold text-charcoal">{car?.model}</h3>
+        <p className="text-gray-600 text-sm mb-1">{car?.mileage}</p>
+        <p className="text-primary-blue font-bold">
+          #{parseInt(car?.price).toLocaleString()}
+        </p>
+        <div className=" flex items-center gap-3">
+          <Link
+            to={`product/${car?.id}-${car?.year}-${car?.make}-${car?.model}`}
+            className=" text-white bg-green-600 p-2 rounded hover:underline text-sm font-medium"
+          >
+            View Details
+          </Link>
+          <i
+                    onClick={handleFavorite}
+
+            className={` p-2 cursor-pointer text-orange-600 pi ${
+              isFavorite(carId()) ? "pi-heart-fill" : "pi-heart"
+            } `}
+          ></i>
+        </div>
+      </div>
     </div>
-    <div className="">
-      <h3 className="font-semibold text-charcoal">{car?.model}</h3>
-      <p className="text-gray-600 text-sm mb-1">{car?.mileage}</p>
-      <p className="text-primary-blue font-bold">
-        #{parseInt(car?.price).toLocaleString()}
-      </p>
-      <Link
-        to={`product/${car?.id}-${car?.year}-${car?.make}-${car?.model}`}
-        className="mt-2 text-white bg-green-600 p-2 rounded hover:underline text-sm font-medium"
-      >
-        View Details
-      </Link>
-    </div>
-  </div>
+  );
 
   // <p>Similaring carrs</p>
-);
+};
 
 export default VehicleDetailsPage;

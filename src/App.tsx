@@ -8,8 +8,7 @@ import { RecoilRoot } from 'recoil';
 function App() {
 
   return (
-      <RecoilRoot>
-
+      <RecoilRoot> 
         <ToastContainer 
         
         position="top-right"

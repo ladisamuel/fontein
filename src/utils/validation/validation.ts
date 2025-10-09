@@ -3,7 +3,7 @@ import * as yup from "yup";
 const passwordRule = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 
 const registerUserValidation = yup.object().shape({
-    fullName: yup.string().required("Name is Required"),
+    username: yup.string().required("Name is Required"),
     email: yup
       .string()
       .email("Please enter a valid email")
@@ -25,11 +25,10 @@ const loginUserValidation = yup.object().shape({
   email: yup.string().email("Please enter a valid email").required("Required"),
   password: yup
     .string()
-    .min(5)
-    .max(25)
-    .matches(passwordRule, "Password must contain at least one number, one lowercase letter, and one uppercase letter")
     .required("Required"),
 });
+
+
 
 
 // Define the ForgotPassword validation schema
@@ -61,10 +60,22 @@ const repairVAlidation = yup.object().shape({
 })
 
 
+
+// Define the login validation schema
+const contactFormValidation = yup.object().shape({
+  full_name: yup.string(),
+  email: yup.string().email("Please enter a valid email").required("Required"),
+  phone: yup.string().required("Required"),
+  subject: yup.string(),
+  message: yup.string().required("Required"),
+});
+
+
 export { 
     loginUserValidation,
     registerUserValidation,
     forgotPasswordValidation,
 
     repairVAlidation,
+    contactFormValidation,
  };
