@@ -38,97 +38,7 @@ const SearchResultsPage: React.FC = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>();
 
   const navigate = useNavigate();
-  // const [searchParams, setSearchParams] = useState({
-  //   customText: "",
-  //   model: "",
-  //   year: "",
-  //   mileage: "",
-  //   status: "",
-  //   transmission: "",
-  //   fuel_type: "",
-  //   color: "",
-  //   engine_type: "",
-  // });
-  // price: "",
-  // condition: "",
-
-  // const vehicles: Vehicle[] = [
-  //   {
-  //     id: 1,
-  //     year: 2020,
-  //     make: "Toyota",
-  //     model: "Camry SE",
-  //     miles: 25000,
-  //     transmission: "Automatic",
-  //     price: 24999,
-  //     image:
-  //       "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-  //   },
-  //   {
-  //     id: 2,
-  //     year: 2020,
-  //     make: "BMW",
-  //     model: "X5 xDrive40i",
-  //     miles: 25000,
-  //     transmission: "Automatic",
-  //     price: 49500,
-  //     image:
-  //       "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-  //   },
-  //   {
-  //     id: 3,
-  //     year: 2017,
-  //     make: "Mercedes",
-  //     model: "Benz C-Class",
-  //     miles: 16000,
-  //     transmission: "Automatic",
-  //     price: 39000,
-  //     image:
-  //       "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-  //   },
-  //   {
-  //     id: 4,
-  //     year: 2019,
-  //     make: "Ford",
-  //     model: "F-150 XLT",
-  //     miles: 69000,
-  //     transmission: "Automatic",
-  //     price: 32000,
-  //     image:
-  //       "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-  //   },
-  //   {
-  //     id: 5,
-  //     year: 2023,
-  //     make: "Honda",
-  //     model: "Civic Sport",
-  //     miles: 10000,
-  //     transmission: "Automatic",
-  //     price: 25500,
-  //     image:
-  //       "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-  //   },
-  //   {
-  //     id: 6,
-  //     year: 2019,
-  //     make: "Jeep",
-  //     model: "Wrangler Sahara",
-  //     miles: 45000,
-  //     transmission: "Automatic",
-  //     price: 35000,
-  //     image:
-  //       "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-  //   },
-  // ];
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setSearchParams((prevParams) => ({
-  //     ...prevParams,
-  //     [name]: value,
-  //   }));
-  // };
-
+  
   const searchVehicles = async (searchOption?: string) => {
     setLoading(true);
 
@@ -232,59 +142,7 @@ const SearchResultsPage: React.FC = () => {
     }
 
     setSelectedFilters(updatedFilters);
-
-    // update the filter state
-    // setSelectedFilters((prev) => {
-    //   const currentValues = prev[key] || [];
-
-    //   let updatedValues = checked
-    //     ? [...currentValues, value] // Add if checked
-    //     : currentValues.filter((v) => v !== value); // Remove if unchecked
-
-    //   const updatedFilters = {
-    //     ...prev,
-    //     [key]: updatedValues,
-    //   };
-
-    //   // Clean up empty arrays (optional)
-    //   if (updatedValues.length === 0) {
-    //     delete updatedFilters[key];
-    //   }
-
-    //   const params = new URLSearchParams();
-    //   Object.entries(updatedFilters).forEach(([k, vals]) => {
-    //     vals.forEach((v) => {
-    //       params.append(k, v);
-    //     });
-    //   });
-
-    //   setSearchQuery(params.toString());
-
-    //   // const query = new URLSearchParams(updated).toString();
-    //   // console.log('query available', query)
-    //   // console.log('filter available', updatedFilters)
-
-    //   filterQuery = updatedFilters
-    //   return updatedFilters;
-    // });
-
-    // const query = toQueryString(updatedFilters);
-    // const newurl =
-    //   window.location.protocol +
-    //   "//" +
-    //   window.location.host +
-    //   window.location.pathname +
-    //   "?" +
-    //   query;
-    // window.history.pushState({ path: newurl }, "", newurl);
-
-    // update the url bar
-    // console.log("newurl", newurl);
-    // function updateUrlQuery(query) {
-    // if (history.pushState) {
-    //     const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + query;
-    // }
-    // }
+ 
   };
 
   // get search query from url and parse back to object
@@ -298,71 +156,7 @@ const SearchResultsPage: React.FC = () => {
     return obj;
   }
 
-  // const filterActions = [
-  //   {
-  //     name: "color",
-  //     visibility: false,
-  //     value: [],
-  //   },
-  // ];
-
-
-  // useEffect(() => {
-  //   const currentFilters = parseQueryString(window.location.search);
-  //   // console.log("selectedFilters", selectedFilters);
-  //   // http://localhost:5173/search?make=Honda&status=importing,reserved&transmission=Manual,CVT
-  //   // setSelectedFilters(currentFilters)
-    
-    
-  //   // console.log("currentFilters", currentFilters);
-
-  //   // Object.entries(currentFilters).map(([Key, value], index)=>{
-  //   //   // console.log(currentFilters[Key]);
-      
-  //   //   return (
-  //   //     currentFilters[Key].forEach((keyValue:any) => {
-  //   //       console.log(keyValue, );
-  //   //       // handleCheckboxChange(Key, keyValue, true)
-          
-  //   //     })
-
-  //   //   )
-      
-      
-  //   // })
-
-  //   // Object
-
-  //   // const params = new URLSearchParams(window.location.search);
-  //   // const filters: Record<string, string[]> = {};
-  //   //   {
-  //   //     "status": [
-  //   //         "available",
-  //   //         "sold",
-  //   //         "importing"
-  //   //     ],
-  //   //     "color": [
-  //   //         "Red",
-  //   //         "Other"
-  //   //     ],
-  //   //     "transmission": [
-  //   //         "CVT",
-  //   //         "Other"
-  //   //     ]
-  //   // }
-  //   // for (const [key, value] of params.entries()) {
-  //   //   if (filters[key]) {
-  //   //     filters[key].push(value);
-  //   //   } else {
-  //   //     filters[key] = [value];
-  //   //   }
-  //   // }
-  //   // setSelectedFilters(filters);
-  //   // setSearchQuery(params.toString());
-  //   // console.log('selectedFilters', selectedFilters)
-  // }, [selectedFilters]);
-
-
+  
 
   useEffect(()=>{
     // const currentFilters = parseQueryString(window.location.search);
@@ -375,8 +169,8 @@ const SearchResultsPage: React.FC = () => {
       <Dialog
         header="Advance Search"
         visible={visible}
-        style={{ width: "90%" }}
-        className="p-5"
+        style={{ width: "90%", backgroundColor: 'white' }}
+        className="p-2"
         onHide={() => {
           if (!visible) return;
           setVisible(false);

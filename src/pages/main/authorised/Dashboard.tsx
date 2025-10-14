@@ -1,7 +1,14 @@
 import React from 'react';
-import { Car, Wrench, ShoppingCart, Search, Bookmark, Calendar, Package, Filter, MessageSquare } from 'lucide-react';
+import { Car, Wrench, ShoppingCart, Search, Bookmark, Package, MessageSquare } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { cartState } from '../../../utils/atom/cartAtom';
+import { repairRequestState } from '../../../utils/atom/repairAtom';
 
 const Dashboard: React.FC = () => {
+  const cart = useRecoilValue(cartState)
+  const repairData = useRecoilValue(repairRequestState)
+
   return (
     <div className="min-h-screen bg-gray-50 mt-[12vh]">
       <main className="px-6 lg:px-[150px] py-8">
@@ -11,33 +18,33 @@ const Dashboard: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, Alex</h1>
             <p className="text-gray-600 mb-6">Track your orders, manage services, and continue shopping.</p>
             <div className="flex gap-3">
-              <button className="bg-green-600 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-green-700 transition">
+              <Link to='/search' className="bg-green-600 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-green-700 transition">
                 <Car size={20} />
                 Browse Cars
-              </button>
-              <button className="bg-white border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition">
+              </Link>
+              <Link to="/repair" className="bg-white border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition">
                 <Wrench size={20} />
                 Request Service
-              </button>
-              <button className="bg-white border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition">
+              </Link>
+              <Link to='/cart' className="bg-white border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition">
                 <ShoppingCart size={20} />
                 View Cart
-              </button>
+              </Link>
             </div>
           </div>
-          <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&h=120&fit=crop" alt="Car" className="rounded-lg w-52 h-24 object-cover" />
+          <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=300&h=120&fit=crop" alt="Car" className="hidden lg:block rounded-lg w-52 h-24 object-cover" />
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <Link to='/cart' className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-gray-600 text-sm">Vehicles in cart</h3>
               <ShoppingCart size={20} className="text-gray-400" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">2</p>
+            <p className="text-3xl font-bold text-gray-900">{cart.length}</p>
             <p className="text-sm text-gray-500 mt-1">+1 new</p>
-          </div>
+          </Link>
 
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
@@ -53,7 +60,7 @@ const Dashboard: React.FC = () => {
               <h3 className="text-gray-600 text-sm">Service requests</h3>
               <Wrench size={20} className="text-gray-400" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">1</p>
+            <p className="text-3xl font-bold text-gray-900">{repairData? '0': <span className='text-sm font-bold text-gray-900'>No request</span>}</p>
             <p className="text-sm text-gray-500 mt-1">Scheduled</p>
           </div>
 
@@ -83,7 +90,7 @@ const Dashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b">
+                  <tr className="border-b border-gray-100">
                     <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Vehicle</th>
                     <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Order ID</th>
                     <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Status</th>
@@ -92,7 +99,7 @@ const Dashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b">
+                  <tr className="border-b  border-gray-100">
                     <td className="py-4 px-2">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -114,7 +121,7 @@ const Dashboard: React.FC = () => {
                     </td>
                   </tr>
 
-                  <tr className="border-b">
+                  <tr className="border-b  border-gray-100">
                     <td className="py-4 px-2">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -160,10 +167,14 @@ const Dashboard: React.FC = () => {
                 </tbody>
               </table>
             </div>
+            <div className="flex justify-end">
+            <button className='btn_primary transition-all duration-300 py-1 px-4 text-white rounded-lg text-sm'>View All</button>
+
+            </div>
           </div>
 
           {/* Upcoming Service */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          {/* <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Upcoming Service</h2>
               <button className="text-sm text-gray-600 flex items-center gap-1 hover:text-gray-900">
@@ -201,77 +212,9 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </div> */}
 
-        {/* Saved Vehicles and Support Messages */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Saved Vehicles */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Saved Vehicles</h2>
-              <button className="text-sm text-gray-600 flex items-center gap-2 hover:text-gray-900">
-                <Filter size={16} />
-                Filter
-              </button>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Vehicle</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Location</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Mileage</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Price</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b">
-                    <td className="py-4 px-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Car size={24} className="text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">2022 BMW</p>
-                          <p className="text-sm text-gray-500">330i</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-2 text-gray-700">Los Angeles, CA</td>
-                    <td className="py-4 px-2 text-gray-700">12,430 mi</td>
-                    <td className="py-4 px-2 font-medium text-gray-900">$35,800</td>
-                    <td className="py-4 px-2">
-                      <button className="text-green-600 hover:text-green-700 font-medium text-sm">Compare</button>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td className="py-4 px-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Car size={24} className="text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">2021 Ford F-</p>
-                          <p className="text-sm text-gray-500">150 XLT</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-2 text-gray-700">Dallas, TX</td>
-                    <td className="py-4 px-2 text-gray-700">22,100 mi</td>
-                    <td className="py-4 px-2 font-medium text-gray-900">$39,400</td>
-                    <td className="py-4 px-2">
-                      <button className="text-green-600 hover:text-green-700 font-medium text-sm">Add to cart</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
+          
           {/* Support Messages */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
@@ -316,26 +259,31 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* Saved Vehicles and Support Messages */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+ 
+        </div>
+
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            <Link to='/search' className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
               <Car size={20} className="text-gray-600" />
               <span className="font-medium text-gray-700">Browse Cars</span>
-            </button>
-            <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            </Link>
+            <Link to='/checkout' className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
               <ShoppingCart size={20} className="text-gray-600" />
               <span className="font-medium text-gray-700">View Cart</span>
-            </button>
-            <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            </Link>
+            <Link to='/repair' className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
               <Wrench size={20} className="text-gray-600" />
               <span className="font-medium text-gray-700">Request Service</span>
-            </button>
-            <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            </Link>
+            <Link to='/user/settings' className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
               <Search size={20} className="text-gray-600" />
-              <span className="font-medium text-gray-700">Saved Searches</span>
-            </button>
+              <span className="font-medium text-gray-700">Account Settings</span>
+            </Link>
           </div>
         </div>
       </main>

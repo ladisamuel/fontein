@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import logoImage from "../assets/logo/Logo.jpg";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../utils/atom/authAtom";
+import { cartState } from "../utils/atom/cartAtom";
 
 export default function Header() {
   const menu = menuItem;
+  const cart = useRecoilValue(cartState);
   const [auth, setAuth] = useRecoilState(authState);
 
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -15,27 +17,27 @@ export default function Header() {
   const [top, setTop] = useState(false);
   const [accountDropDownisOpen, setAccountDropDownIsOpen] = useState(false);
 
-    const togglePopup = () => {
-      console.log('toggle popup', accountDropDownisOpen)
+  const togglePopup = () => {
+    console.log("toggle popup", accountDropDownisOpen);
     setAccountDropDownIsOpen(!accountDropDownisOpen);
   };
 
-    const handleClickOutside = (e: any) => {
+  const handleClickOutside = (e: any) => {
     if (popupRef.current && !popupRef.current.contains(e.target)) {
       setAccountDropDownIsOpen(false);
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     if (accountDropDownisOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     // Cleanup event listener when component unmounts or accountDropDownisOpen changes
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [accountDropDownisOpen]);
 
@@ -52,9 +54,9 @@ export default function Header() {
     <header
       className={`${
         top ? "shadow-2xl " : "shadow-none "
-      } main_padding h-[12vh] bg-white my-auto w-full z-50 fixed flex items-center top-0 transition-all `}
+      }  h-[12vh]  bg-white my-auto w-full z-50 fixed flex items-center top-0 transition-all `}
     >
-      <nav className="w-full">
+      <nav className="max-w-7xl main_padding mx-auto w-full">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-full flex items-center justify-center">
@@ -79,10 +81,17 @@ export default function Header() {
                   key={index}
                   className="text-gray-700 hover:text-gray-900"
                 >
-                  {item.icon ? (
-                    <i
-                      className={`${item.icon} p-2 text-gray-500 text-sm rounded-lg border border-gray-200`}
-                    ></i>
+                  {item.icon && item.link === "/cart" ? (
+                    <div key={index} className="relative">
+                      {cart.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                          {cart.length}
+                        </span>
+                      )}
+                      <i
+                        className={`${item.icon} p-2 text-gray-500 text-sm rounded-lg border border-gray-200`}
+                      ></i>
+                    </div>
                   ) : (
                     ""
                   )}
@@ -91,27 +100,55 @@ export default function Header() {
               ) : auth ? (
                 <div key={index} className="relative">
                   <i
-                  onClick={togglePopup}
+                    onClick={togglePopup}
                     className={`pi pi-user hover:bg-green-100 cursor-pointer p-2 text-gray-500 text-sm rounded-lg border border-gray-200 transition-all`}
                   ></i>
-                  {accountDropDownisOpen && 
-                  <div ref={popupRef} className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
-                    <ul className="textxs flex flex-col text-gray-500 py-1 rounded-xl">
-                      <li className=" px-1 ">
-                        <div className="border px-1 border-gray-200 rounded   ">
-                          <p className="text-gray-800 text-xs">{auth.user.username}</p>
-                          <p className="text-gray800 text-xs">{auth.user.email}</p>
-                        </div>
-                      </li>
-                      <Link to='/user/dashboard' className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 mt-1 "><i className="pi pi-sitemap" ></i> My Dashboard</Link>
-                      <Link to='' className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 "><i className="pi pi-user-edit" ></i>Account Settings</Link>
-                      <li className=" px-2 ">
-                        <hr className="border-gray-200" />
-                      </li>
-                      <li onClick={()=>setAuth(null)} className="flex justify-center text-xs gap-1 items-center text-red-500 bordert hover:bg-red-50 cursor-pointer py-2 px-2 ">Sign out</li>
-                    </ul>
-                  </div>
-                  }
+                  {accountDropDownisOpen && (
+                    <div
+                      ref={popupRef}
+                      className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg"
+                    >
+                      <ul className="textxs flex flex-col text-gray-500 py-1 rounded-xl">
+                        <li className=" px-1 ">
+                          <div className="border px-1 border-gray-200 rounded   ">
+                            <p className="text-gray-800 text-xs">
+                              {auth.user.username}
+                            </p>
+                            <p className="text-gray800 text-xs">
+                              {auth.user.email}
+                            </p>
+                          </div>
+                        </li>
+                        <Link
+                          to="/user/dashboard"
+                          className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 mt-1 "
+                        >
+                          <i className="pi pi-sitemap"></i> My Dashboard
+                        </Link>
+                        <Link
+                          to="/user/settings"
+                          className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 "
+                        >
+                          <i className="pi pi-user-edit"></i>Account Settings
+                        </Link>
+                        <Link
+                          to="/user/settings"
+                          className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 "
+                        >
+                          <i className="pi pi-"></i>Support
+                        </Link>
+                        <li className=" px-2 ">
+                          <hr className="border-gray-200" />
+                        </li>
+                        <li
+                          onClick={() => setAuth(null)}
+                          className="flex justify-center text-xs gap-1 items-center text-red-500 bordert hover:bg-red-50 cursor-pointer py-2 px-2 "
+                        >
+                          Sign out
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Link key={index} to={item.link}>
@@ -122,8 +159,20 @@ export default function Header() {
               )
             )}
           </div>
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
             {/* Mobile menu button */}
+            <Link to="/cart">
+              <div className="relative">
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                    {cart.length}
+                  </span>
+                )}
+                <i
+                  className={`pi pi-heart p-2 text-gray-500 text-sm rounded-lg border border-gray-200`}
+                ></i>
+              </div>
+            </Link>
             <button
               className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

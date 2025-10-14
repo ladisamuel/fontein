@@ -14,6 +14,9 @@ import ContactPage from '../pages/main/ContactPage';
 import Dashboard from '../pages/main/authorised/Dashboard';
 import AuthLayout from './layouts/AuthLayout';
 import UserLayout from './layouts/UserLayout';
+import CartPage from '../pages/main/CartPage';
+import AccountSettingsPage from '../pages/main/authorised/AccountSettingsPage';
+import CheckoutPage from '../pages/main/authorised/CheckoutPage';
 
 
 const router = createBrowserRouter([
@@ -114,6 +117,10 @@ const router = createBrowserRouter([
         element: <SearchResultsPage />
       },
       {
+        path: '/cart',
+        element: <CartPage />
+      },
+      {
         path: 'product',
         element: <SearchResultsPage />
       },
@@ -132,6 +139,14 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <Dashboard />
+      },
+      {
+        path: 'settings',
+        element: <AccountSettingsPage />
+      },
+      {
+        path: 'order/checkout',
+        element: <CheckoutPage />
       },
     ]
   },

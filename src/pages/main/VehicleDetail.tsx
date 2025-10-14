@@ -18,8 +18,6 @@ import type { Vehicles } from "../../utils/type/vehicle";
 
 import { Galleria } from "primereact/galleria";
 import { Dialog } from "primereact/dialog";
-import { useRecoilState } from "recoil";
-import { cartState } from "../../utils/atom/cartAtom";
 import { useFavoriteVehicle } from "../../utils/hooks/useFavoriteVehicle";
 import { toast } from "react-toastify";
 

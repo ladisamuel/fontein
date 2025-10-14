@@ -199,7 +199,7 @@ const ContactPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={!isValid || loading || isSubmitting}
-                  className="flex items-center  bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex items-center  bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed justify-center"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

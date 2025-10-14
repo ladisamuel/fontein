@@ -200,8 +200,7 @@ const LoginThree: React.FC = () => {
                     )}
                   </button>
                 </div>
-              </form>
-                 
+              </form>                 
 
             {/* Register Link */}
             <div className="mt-8 text-center">

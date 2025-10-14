@@ -129,7 +129,7 @@ const AutoTradeWebsite: React.FC = () => {
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
             >
-              <option selected value="none">Price Range</option>
+              <option value="none">Price Range</option>
               <option value="0">#0 - #2,000,000</option>
               <option value="2000000">#2,000,000 - #8,000,000</option>
               <option value="8000000">#8,000,000+</option>

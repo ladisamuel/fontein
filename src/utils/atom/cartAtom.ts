@@ -5,8 +5,6 @@
 import { recoilPersist } from "recoil-persist";
 import Cookies from "js-cookie";
 import { atom } from "recoil";
-import type { Vehicles } from '../type/vehicle'
-// import { cookieStorage } from './recoilCookiesStorage';
  
 
 const cookieStorage = (keyPrefix = "") => ({

@@ -30,3 +30,7 @@ body {
 .btn_primary {
     @apply bg-gradient-to-br from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 transition-all duration-300;
 }
+
+input,  textarea{
+    @apply outline-none;
+}

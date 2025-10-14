@@ -102,11 +102,12 @@ const AutoTradePro: React.FC = () => {
       selectedPackages,
     });
     // sdsd
-    // console.log('repairData', repairData)
+    console.log('repairData', repairData)
 
     if (repairData) {
       // const payload = {...values, status: 'pending'}
       // console.log( payload)
+      console.log('Nah repair')
       await editVehicleRepair(values, repairData?.id).then((res)=>{
         console.log(res)
         setRepairData(res.data)
@@ -117,6 +118,7 @@ const AutoTradePro: React.FC = () => {
       })
       
     } else {
+      console.log('Nah request')
       await createVehicleRepair(values).then((res)=>{
         console.log(res)
         setRepairData(res.data)
@@ -181,7 +183,6 @@ const AutoTradePro: React.FC = () => {
   }, [])
   return (
     <div className="min-h-screen  bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Header */}
       <Dialog
       
         header={requestStatus === 'Created' ? "Repair Request Sent" : requestStatus === 'Updated' ? "Repair Request Updated" : ""  }

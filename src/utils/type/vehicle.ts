@@ -23,6 +23,11 @@ interface Vehicles {
   status: string;
   year: number;
   first_image: string;
+
+  transmission: string;
+  color: string;
+  vin: string;
+
 }
 
 interface ContactFormType {
@@ -32,6 +37,24 @@ interface ContactFormType {
     subject: string;
     message: string;
 }
+
+// interface CartItem {
+//   id: number;
+//   name: string;
+//   year: number;
+//   image: string;
+//   price: number;
+//   quantity: number;
+//   mileage: string;
+//   drivetrain: string;
+//   color: string;
+//   vin: string;
+//   location: string;
+//   badge?: string;
+//   certified?: boolean;
+//   mpg?: string;
+//   premium?: boolean;
+// }
 
 export type {
     Make,
