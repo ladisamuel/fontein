@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   User, Lock, Bell, CreditCard, Wrench, AlertTriangle, 
   Upload, RotateCcw, MapPin, Mail, Shield, 
@@ -7,43 +7,52 @@ import {
 import { Link } from 'react-router-dom';
 
 const AccountSettingsPage: React.FC = () => {
-  const [profile, setProfile] = useState({
-    firstName: 'Ava',
-    lastName: 'Johnson',
-    email: 'ava.johnson@example.com',
-    phone: '+1 (555) 014-2244',
-    location: 'Austin, TX',
-    preferredContact: 'Email'
-  });
+  const [profile, setProfile] = useState<any>({});
 
-  const [security, setSecurity] = useState({
+  const [security, setSecurity] = useState<any>({});
+ 
+
+  const [billing, setBilling] = useState<any>({});
+
+  const [preferences, setPreferences] = useState<any>({});
+
+  const secure: any = {
     currentPassword: '••••••••',
     newPassword: '••••••••',
     confirmPassword: '••••••••',
     twoFactor: 'Authenticator App'
-  });
+  }
 
-  const [notifications, setNotifications] = useState({
-    orderUpdates: true,
-    priceAlerts: true,
-    billingReceipts: 'email'
-  });
+  const pref: any = {
+    dealership: 'Downtown Service Center',
+    loaner: 'When Available',
+    maintenance: 'Standard 24 mo',
+    communicationWindow: '8am - 6pm (Local)'
+  }
 
-  const [billing, setBilling] = useState({
+  const bill: any = {
     cardNumber: '•••• 4242',
     cardExpiry: 'Exp 12/27',
     billingEmail: 'billing@autouser.com',
     billingAddress: '500 Market St, Austin, TX 78701',
     deliveryAddress: '742 Evergreen Terrace, Springfield, IL 62701'
-  });
+  }
 
-  const [preferences, setPreferences] = useState({
-    dealership: 'Downtown Service Center',
-    loaner: 'When Available',
-    maintenance: 'Standard 24 mo',
-    communicationWindow: '8am - 6pm (Local)'
-  });
+  const profl: any =  {
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    phone: '+1 (555) 014-2244',
+    location: 'Austin, TX',
+    preferredContact: 'Email'
+  }
 
+  useEffect(()=>{
+    setSecurity(secure);
+    setPreferences(pref)
+    setBilling(bill);
+    setProfile(profl)
+  }, [])
   return (
     <div className="min-h-screen mt-[12vh] bg-gray-50">
  
@@ -106,7 +115,7 @@ const AccountSettingsPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
               <input
                 type="text"
-                value={profile.firstName}
+                value={profile?.firstName}
                 onChange={(e) => setProfile({...profile, firstName: e.target.value})}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -115,7 +124,7 @@ const AccountSettingsPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
               <input
                 type="text"
-                value={profile.lastName}
+                value={profile?.lastName}
                 onChange={(e) => setProfile({...profile, lastName: e.target.value})}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -124,7 +133,7 @@ const AccountSettingsPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <input
                 type="email"
-                value={profile.email}
+                value={profile?.email}
                 onChange={(e) => setProfile({...profile, email: e.target.value})}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -133,7 +142,7 @@ const AccountSettingsPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
               <input
                 type="tel"
-                value={profile.phone}
+                value={profile?.phone}
                 onChange={(e) => setProfile({...profile, phone: e.target.value})}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -144,7 +153,7 @@ const AccountSettingsPage: React.FC = () => {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  value={profile.location}
+                  value={profile?.location}
                   onChange={(e) => setProfile({...profile, location: e.target.value})}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -154,7 +163,7 @@ const AccountSettingsPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Contact</label>
               <input
                 type="text"
-                value={profile.preferredContact}
+                value={profile?.preferredContact}
                 onChange={(e) => setProfile({...profile, preferredContact: e.target.value})}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />

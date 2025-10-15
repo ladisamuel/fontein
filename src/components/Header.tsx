@@ -18,7 +18,6 @@ export default function Header() {
   const [accountDropDownisOpen, setAccountDropDownIsOpen] = useState(false);
 
   const togglePopup = () => {
-    console.log("toggle popup", accountDropDownisOpen);
     setAccountDropDownIsOpen(!accountDropDownisOpen);
   };
 
@@ -58,7 +57,7 @@ export default function Header() {
     >
       <nav className="max-w-7xl main_padding mx-auto w-full">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-3">
+          <Link to='/' className="flex items-center cursor-pointer space-x-3">
             <div className="w-12 h-12 rounded-full flex items-center justify-center">
               <span className="text-white border font-bold text-lg">
                 <img
@@ -72,7 +71,7 @@ export default function Header() {
             <span className="text-xl font-semibold text-gray-900">
               Fontein Resource
             </span>
-          </div>
+          </Link>
           <div className="hidden md:flex items-center space-x-8">
             {menu.open.map((item, index) =>
               index !== menu.open.length - 1 ? (
@@ -112,10 +111,10 @@ export default function Header() {
                         <li className=" px-1 ">
                           <div className="border px-1 border-gray-200 rounded   ">
                             <p className="text-gray-800 text-xs">
-                              {auth.user.username}
+                              {auth?.user?.username}
                             </p>
                             <p className="text-gray800 text-xs">
-                              {auth.user.email}
+                              {auth?.user?.email}
                             </p>
                           </div>
                         </li>
@@ -161,6 +160,9 @@ export default function Header() {
           </div>
           <div className="md:hidden flex items-center gap-2">
             {/* Mobile menu button */}
+            <div className="">
+
+            </div>
             <Link to="/cart">
               <div className="relative">
                 {cart.length > 0 && (
@@ -169,10 +171,66 @@ export default function Header() {
                   </span>
                 )}
                 <i
-                  className={`pi pi-heart p-2 text-gray-500 text-sm rounded-lg border border-gray-200`}
+                  className={`pi pi-shopping-cart p-2 text-gray-500 text-sm rounded-lg border border-gray-200`}
                 ></i>
               </div>
             </Link>
+                {
+                auth ? 
+                <div className="relative">
+                  <i
+                    onClick={togglePopup}
+                    className={`pi pi-user hover:bg-green-100 cursor-pointer p-2 text-gray-500 text-sm rounded-lg border border-gray-200 transition-all`}
+                  ></i>
+                  {accountDropDownisOpen && (
+                    <div
+                      ref={popupRef}
+                      className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg"
+                    >
+                      <ul className="textxs flex flex-col text-gray-500 py-1 rounded-xl">
+                        <li className=" px-1 ">
+                          
+                          <div className="border px-1 border-gray-200 rounded   ">
+                            <p className="text-gray-800 text-xs">
+                              {auth?.user?.username}
+                            </p>
+                            <p className="text-gray800 text-xs">
+                              {auth?.user?.email}
+                            </p>
+                          </div>
+                        </li>
+                        <Link
+                          to="/user/dashboard"
+                          className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 mt-1 "
+                        >
+                          <i className="pi pi-sitemap"></i> My Dashboard
+                        </Link>
+                        <Link
+                          to="/user/settings"
+                          className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 "
+                        >
+                          <i className="pi pi-user-edit"></i>Account Settings
+                        </Link>
+                        <Link
+                          to="/user/settings"
+                          className="grid grid-cols-[1fr_10fr] gap-1 items-center hover:bg-green-100 cursor-pointer py-2 px-2 "
+                        >
+                          <i className="pi pi-"></i>Support
+                        </Link>
+                        <li className=" px-2 ">
+                          <hr className="border-gray-200" />
+                        </li>
+                        <li
+                          onClick={() => setAuth(null)}
+                          className="flex justify-center text-xs gap-1 items-center text-red-500 bordert hover:bg-red-50 cursor-pointer py-2 px-2 "
+                        >
+                          Sign out
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div> :''
+                }
             <button
               className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -194,12 +252,14 @@ export default function Header() {
               </svg>
             </button>
 
-            {mobileMenuOpen ? (
-              // index !== menu.open.length - 1 ?
-              <div className="md:hidden absolute top-full z-50 left-1/2 -translate-x-1/2 w-[90%] mx-auto bg-white border-t border-gray-200 shadow-lg">
+            {mobileMenuOpen ? 
+              (
+                <div className="md:hidden absolute top-full z-50 left-1/2 -translate-x-1/2 w-[90%] mx-auto bg-white border-t border-gray-200 shadow-lg">
                 <ul className="flex flex-col">
                   {menu.open.map((item, index) =>
-                    item.text ? (
+                // index !== menu.open.length - 1 ?
+                    item.text && index !== menu.open.length - 1 ? 
+                    (
                       <li className="hover:bg-gray-200">
                         <Link
                           to={item.link}
@@ -210,8 +270,19 @@ export default function Header() {
                         </Link>
                       </li>
                     ) : (
-                      ""
-                    )
+                      auth ? (
+                        '' 
+                      ) :
+                      <li className="hover:bg-gray-200">
+                        <Link
+                          to={item.link}
+                          key={index}
+                          className="block px-4 py-2"
+                        >
+                          {item.text}
+                        </Link>
+                      </li>
+              )
                   )}
                 </ul>
               </div>

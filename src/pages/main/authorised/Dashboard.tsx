@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, Alex</h1>
             <p className="text-gray-600 mb-6">Track your orders, manage services, and continue shopping.</p>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <Link to='/search' className="bg-green-600 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-green-700 transition">
                 <Car size={20} />
                 Browse Cars
