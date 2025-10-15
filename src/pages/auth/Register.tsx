@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import {
-  loginUserValidation,
   registerUserValidation,
 } from "../../utils/validation/validation";
-import { loginUser, registerUser } from "../../utils/api/userAPI";
+import { registerUser } from "../../utils/api/userAPI";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
