@@ -34,8 +34,8 @@ export default function ScrollButtons() {
   return (
     <div>
       <div className="flex flex-col gap-2">
-        {scrollY < 100 ?"":<button onClick={handleScrollUp}><i className='pi pi-angle-up  cursor-pointer rounded-full bg-green-300 opacity-80 p-2 text-2xl text-white font-bold '></i></button>}
-        {scrollY > document.body.scrollHeight - window.innerHeight - 100 ? "":<button onClick={handleScrollDown}><i className='pi pi-angle-down cursor-pointer rounded-full bg-green-300 opacity-80 p-2 text-2xl text-white font-bold '></i></button>}
+        {scrollY < 100 ?"":<button onClick={handleScrollUp}><i className='pi pi-angle-up  cursor-pointer rounded-full bg-green-300 hover:bg-green-400 opacity-80 p-2 text-2xl text-white font-bold '></i></button>}
+        {scrollY > document.body.scrollHeight - window.innerHeight - 100 ? "":<button onClick={handleScrollDown}><i className='pi pi-angle-down cursor-pointer rounded-full bg-green-300 hover:bg-green-400 opacity-80 p-2 text-2xl text-white font-bold '></i></button>}
       </div>
     </div>
   )

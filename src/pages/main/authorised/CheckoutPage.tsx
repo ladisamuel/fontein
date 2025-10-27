@@ -4,15 +4,18 @@ import {
   Truck,
   CreditCard,
   ShoppingBag,
-  Download,
   Shield,
+  Download,
 } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../../utils/atom/authAtom";
+import PaystackPaymentButton from "../../../components/PaystackPaymentButton";
+import { toast } from "react-toastify";
 
 const CheckoutPage: React.FC = () => {
-    const auth = useRecoilValue(authState)
+  const auth = useRecoilValue(authState);
+  const navigate = useNavigate();
   const [deliveryDetails, setDeliveryDetails] = useState({
     fullName: auth?.user?.username,
     email: auth?.user?.email,
@@ -25,18 +28,61 @@ const CheckoutPage: React.FC = () => {
     notes: "",
   });
 
-  const [deliveryMethod, setDeliveryMethod] = useState("home");
+  const [deliveryMethod, setDeliveryMethod] = useState("pickup");
+  const [dataBills, setDataBills] = useState<any>([]);
+  const [dataDetails, setDataDetails] = useState<any>([]);
 
   const { state } = useLocation();
- 
 
-//   const handleCheckout = () => {
-//     alert("Processing payment...");
-//   };
+  const handlePaymentSuccess = (ref: any) => {
+    navigate(`/user/order/comfirmation/py_ref/${ref.reference.reference}`);
+  };
 
+//   {
+//     "fullName": "SupryTech",
+//     "email": "suprytech@email.com",
+//     "phone": "",
+//     "address": "",
+//     "city": "",
+//     "state": "",
+//     "country": "",
+//     "zip": "",
+//     "notes": ""
+// }
+
+const validateCheckoutForm = () => {
+  if (!deliveryDetails.phone) {
+    return false;
+  }
+
+
+  if (deliveryMethod === "home") {
+    if (!deliveryDetails.address || !deliveryDetails.city || !deliveryDetails.state || !deliveryDetails.country) {
+      return false;
+    }
+  }
+
+  // console.log("Checkout form validated phone.", deliveryDetails.phone);
+  // console.log("Checkout form validated address.", deliveryDetails.address);
+  return true; 
+  
+};
+  
   useEffect(() => {
+    
+  console.log("Checkout mounted.:",);
+    if (state) {
+  console.log("Checkout mounted. Location state:", state);
+      setDataBills(state.bills);
+      setDataDetails(state.cartItems);
+    } else {
+      console.log("With data:", state);
+      navigate("/cart");
+    }
   }, []);
 
+
+  
   return (
     <div className="mt-[12vh] bg-gray-50">
       {/* Main Content */}
@@ -88,7 +134,7 @@ const CheckoutPage: React.FC = () => {
                   </label>
                   <input
                     type="text"
-                    value={deliveryDetails?.fullName ?? ''}
+                    value={deliveryDetails?.fullName ?? ""}
                     disabled
                     onChange={(e) =>
                       setDeliveryDetails({
@@ -118,7 +164,7 @@ const CheckoutPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone
+                    Phone <span className="text-red-400">*</span>
                   </label>
                   <input
                     type="tel"
@@ -130,12 +176,14 @@ const CheckoutPage: React.FC = () => {
                         phone: e.target.value,
                       })
                     }
+                    required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Address
+                    Address 
+                    {deliveryMethod === "home" ? <span className="text-red-400">*</span> : null}
                   </label>
                   <input
                     type="text"
@@ -147,12 +195,13 @@ const CheckoutPage: React.FC = () => {
                         address: e.target.value,
                       })
                     }
+                    required={deliveryMethod === "home"}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City
+                    City {deliveryMethod === "home" ? <span className="text-red-400">*</span> : null}
                   </label>
                   <input
                     type="text"
@@ -164,12 +213,13 @@ const CheckoutPage: React.FC = () => {
                         city: e.target.value,
                       })
                     }
+                    required={deliveryMethod === "home"}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    State
+                    State {deliveryMethod === "home" ? <span className="text-red-400">*</span> : null}
                   </label>
                   <input
                     type="text"
@@ -181,6 +231,7 @@ const CheckoutPage: React.FC = () => {
                         state: e.target.value,
                       })
                     }
+                    required={deliveryMethod === "home"}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
@@ -203,7 +254,7 @@ const CheckoutPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Country
+                    Country {deliveryMethod === "home" ? <span className="text-red-400">*</span> : null}  
                   </label>
                   <input
                     type="text"
@@ -215,6 +266,7 @@ const CheckoutPage: React.FC = () => {
                         country: e.target.value,
                       })
                     }
+                    required={deliveryMethod === "home"}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
@@ -247,7 +299,7 @@ const CheckoutPage: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                <button
+                <div
                   onClick={() => setDeliveryMethod("home")}
                   className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition ${
                     deliveryMethod === "home"
@@ -275,9 +327,9 @@ const CheckoutPage: React.FC = () => {
                     </div>
                   </div>
                   <span className="font-semibold text-gray-900">$199.00</span>
-                </button>
+                </div>
 
-                <button
+                <div
                   onClick={() => setDeliveryMethod("pickup")}
                   className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition ${
                     deliveryMethod === "pickup"
@@ -307,7 +359,7 @@ const CheckoutPage: React.FC = () => {
                     </div>
                   </div>
                   <span className="font-semibold text-gray-900">$0.00</span>
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -323,30 +375,49 @@ const CheckoutPage: React.FC = () => {
               </div>
 
               <div className="space-y-3 mb-6 pb-6 border-b border-gray-200">
-                {Object.entries(state).map(([itemKey, itemValue]: any,) => (
-                    itemValue.name === 'total' ? null : (
-                  <div key={itemKey} className="flex justify-between text-sm">
-                    <span className="text-gray-600" >{itemValue?.name}</span>
-                    <span className="font-medium text-gray-900">
-                      #{itemValue?.amount?.toLocaleString()}
-                    </span>
-                  </div>)
-                ))}
+                {Object.entries(dataBills).map(([itemKey, itemValue]: any) =>
+                  itemValue.name === "total" ? null : (
+                    <div key={itemKey} className="flex justify-between text-sm">
+                      <span className="text-gray-600">{itemValue?.name}</span>
+                      <span className="font-medium text-gray-900">
+                        #{itemValue?.amount?.toLocaleString()}
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
 
               <div className="flex justify-between items-center mb-6">
                 <span className="text-lg font-bold text-gray-900">Total</span>
                 <span className="text-2xl font-bold text-gray-900">
-                  #{state?.[2].amount.toLocaleString()}
+                  #{dataBills?.[2]?.amount?.toLocaleString()}
                 </span>
               </div>
 
+              {validateCheckoutForm() ? 
+               
+              <PaystackPaymentButton
+                className="btn_primary flex-1 flex items-center justify-center space-x-2 py-2 border rounded-lg text-white text-sm font-medium"
+                email={auth?.user?.email || ``}
+                amount={dataBills?.[2]?.amount} 
+                onSuccess={handlePaymentSuccess}
+                  // disabled={!validateCheckoutForm()}
+                  productUserDetails={deliveryDetails}
+                  deliveryMethod={deliveryMethod}
+                  totalBalance={dataBills}
+                  cartItems={dataDetails}
+
+              />
+              :
               <div className="flex space-x-3"> 
-                <button className="btn_primary flex-1 flex items-center justify-center space-x-2 py-2 border rounded-lg text-white text-sm font-medium">
+                <button 
+                className="bg-gray-500 cursor-no-drop flex-1 flex items-center justify-center space-x-2 py-2 border rounded-lg text-white text-sm font-medium"
+                >
                   <Download className="w-4 h-4" />
                   <span className="">Proceed with payment</span>
-                </button>
+                </button> 
               </div>
+              }
             </div>
           </div>
         </div>

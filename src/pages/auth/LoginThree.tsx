@@ -20,6 +20,7 @@ const LoginThree: React.FC = () => {
   const navigate = useNavigate()
   const auth = useSetRecoilState(authState)
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [pass_visible, setPass_visible] = useState<boolean>(false);
 
 
 
@@ -156,10 +157,11 @@ const LoginThree: React.FC = () => {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Password <span className="text-sm text-red-500">*</span>
                     </label>
-
+                    <div className=" relative">
+                      <i onClick={()=>setPass_visible(!pass_visible)} className={`pi ${pass_visible ? 'pi-eye-slash': 'pi-eye'} absolute right-0 top-1/2 -translate-y-1/2 text-2xl text-gray-400 p-3 rounded-xl bg-gray-100 cursor-pointer `}></i>
                     <input
                       name="password"
-                      type="password"
+                      type={pass_visible ? "text" : "password"}
                       value={values.password}
                       onBlur={handleBlur}
                       placeholder="********"
@@ -168,6 +170,7 @@ const LoginThree: React.FC = () => {
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none focus:ring-green-500 focus:border-transparent transition-all"
                       required
                     />
+                    </div>
 
                     {errors.password && touched.password && (
                       <p className="error text-sm text-red-400">

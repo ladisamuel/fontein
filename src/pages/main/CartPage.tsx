@@ -17,15 +17,15 @@ import { useRecoilState } from "recoil";
 import { cartState } from "../../utils/atom/cartAtom";
 import { searchVehiclesAPI } from "../../utils/api/products";
 import { Link, useNavigate } from "react-router-dom";
- 
+
 const CartPage: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [cart, setCart] = useRecoilState<any>(cartState);
   const [cartItems, setCartItems] = useState<any>([]);
+  
   const getItems = async () => {
     const payload = `id=` + cart;
     await searchVehiclesAPI(payload).then((res) => {
-
       const results = res.data.results.map((item: any) => ({
         ...item,
         quantity: 1, // default quantity
@@ -33,7 +33,6 @@ const CartPage: React.FC = () => {
       }));
 
       setCartItems(results);
-
     });
   };
 
@@ -47,6 +46,8 @@ const CartPage: React.FC = () => {
           : item
       )
     );
+
+    console.log('cartItems', cartItems);
   };
 
   const removeItem = (id: string | number) => {
@@ -61,29 +62,31 @@ const CartPage: React.FC = () => {
     (sum: any, item: any) => sum + item?.price * item?.quantity,
     0
   );
-//   const deliveryEstimate = 900;
+  //   const deliveryEstimate = 900;
   const taxes = 7450;
   const total = subtotal + taxes;
 
-  
   const gotoCheckOut = () => {
     const bills = [
-        {
-            name: 'subtotal',
-            amount: subtotal,
-        },
-        {
-            name: 'taxes',
-            amount: taxes,
-        },
-        { name: 'total',
-            amount: total,
-        },
-    ]
-    navigate('/user/order/checkout', { state: bills });
-  }
+      {
+        name: "subtotal",
+        amount: subtotal,
+      },
+      {
+        name: "taxes",
+        amount: taxes,
+      },
+      {
+        name: "total",
+        amount: total,
+      },
+    ];
 
-  
+    console.log('cartItems', cartItems);
+
+    navigate("/user/order/checkout", { state: {bills: bills, cartItems: cartItems } });
+  };
+
   useEffect(() => {
     if (cart.length) {
       getItems();
@@ -151,9 +154,9 @@ const CartPage: React.FC = () => {
                       <div className="flex flex-col lg:flex-row gap-6">
                         {/* Vehicle Image */}
                         <div className="flex-shrink-0 flex items-start justify-between">
-                          <div className="max-w-32 max-h-32 bg-gradient-to-br from-gray-800 to-gray-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
-                            <img src={item?.first_image} alt="" />
-                          </div>
+                          <Link to={`/product/${item?.id}/${item.year}-${item.make}-${item.model}`} className="max-w-32 max-h-32 bg-gradient-to-br from-gray-800 to-gray-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
+                            <img src={item?.first_image} alt="" className="rounded" />
+                          </Link>
                           <div className="lg:hidden">
                             <div className="flex items-center space-x-3">
                               <button
@@ -172,40 +175,47 @@ const CartPage: React.FC = () => {
                                 <Plus className="w-4 h-4" />
                               </button>
                             </div>
-                            
+
                             <div className="flex justify-end items-center pt-2 space-x-4">
                               <span className="text-2xl font-bold text-gray-900">
                                 #{item.price.toLocaleString()}
                               </span>
                             </div>
-
                           </div>
                         </div>
- 
+
                         {/* Vehicle Details */}
                         <div className="flex-1">
                           <div className="flex justify-between items-start mb-2">
                             <div>
-                              <h3 className="text-lg font-semibold text-gray-900">
+                              <Link to={`/product/${item?.id}/${item.year}-${item.make}-${item.model}`} className="text-lg font-semibold text-green-500">
                                 {item.year} {item.make} {item.model}
-                              </h3>
+                              </Link>
                               <div className="flex flex-wrap items-center space-x-2 mt-1 text-sm text-gray-600">
-                                <span><span className="pi pi-map text-xs"></span> {item.mileage.toLocaleString()}</span>
+                                <span>
+                                  <span className="pi pi-map text-xs"></span>{" "}
+                                  {item.mileage.toLocaleString()}
+                                </span>
                                 <span>•</span>
-                                <span><span className="pi pi-arrow-right-arrow-left text-xs"></span> {item.transmission}</span>
+                                <span>
+                                  <span className="pi pi-arrow-right-arrow-left text-xs"></span>{" "}
+                                  {item.transmission}
+                                </span>
                                 <span>•</span>
                                 <span>{item.color}</span>
                                 <span>•</span>
-                                <span><span className="pi pi-sort-numeric-up text-xs"></span> {item.vin}</span>
-                              </div> 
+                                <span>
+                                  <span className="pi pi-sort-numeric-up text-xs"></span>{" "}
+                                  {item.vin}
+                                </span>
+                              </div>
                             </div>
-                              <button
-                                onClick={() => removeItem(item?.id)}
-                                className="text-gray-400 hover:text-red-600"
-                              >
-                                <X className="w-5 h-5" />
-                              </button>
-
+                            <button
+                              onClick={() => removeItem(item?.id)}
+                              className="text-gray-400 hover:text-red-600"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
                           </div>
 
                           {/* Quantity and Price Controls */}
@@ -230,7 +240,7 @@ const CartPage: React.FC = () => {
                             <div className="flex items-center space-x-4">
                               <span className="text-2xl font-bold text-gray-900">
                                 #{item.price.toLocaleString()}
-                              </span> 
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -304,7 +314,7 @@ const CartPage: React.FC = () => {
                     <span className="font-medium text-gray-900">
                       #{subtotal.toLocaleString()}
                     </span>
-                  </div> 
+                  </div>
                   {/* <div className="flex justify-between text-gray-600">
                     <span>Delivery Estimate</span>
                     <span className="font-medium text-gray-900">
@@ -360,11 +370,17 @@ const CartPage: React.FC = () => {
 
                 {/* Action Buttons */}
                 <div className="space-y-3">
-                  <button onClick={gotoCheckOut} className="w-full flex items-center justify-center space-x-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium">
+                  <button
+                    onClick={gotoCheckOut}
+                    className="w-full flex items-center justify-center space-x-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium"
+                  >
                     <CreditCard className="w-5 h-5" />
                     <span>Proceed to Checkout</span>
                   </button>
-                  <Link to='/search' className="w-full flex items-center justify-center space-x-2 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium">
+                  <Link
+                    to="/search"
+                    className="w-full flex items-center justify-center space-x-2 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
+                  >
                     <Search className="w-5 h-5" />
                     <span>Continue Shopping</span>
                   </Link>
@@ -377,9 +393,14 @@ const CartPage: React.FC = () => {
         <div className="min-h-[60vh]">
           <div className="">
             <div className="flex flex-col items-center gap-5 justify-center text-center text-black py-20 px-4">
-                <h2 className="text-3xl font-bold">Your Cart is Empty</h2>
-                <p>Add some vehicle to proceed to checkout</p>
-                <Link to='/search' className="btn_primary text-white p-5 py-2 rounded-lg">Search vehicles</Link>
+              <h2 className="text-3xl font-bold">Your Cart is Empty</h2>
+              <p>Add some vehicle to proceed to checkout</p>
+              <Link
+                to="/search"
+                className="btn_primary text-white p-5 py-2 rounded-lg"
+              >
+                Search vehicles
+              </Link>
             </div>
           </div>
         </div>

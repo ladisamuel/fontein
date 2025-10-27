@@ -1,7 +1,9 @@
 import { recoilPersist } from 'recoil-persist';
 import Cookies from 'js-cookie';
-import { atom } from 'recoil';
+import { atom, selector, useSetRecoilState } from 'recoil';
 import type { AuthType, UserType } from '../type/userType';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 // import { cookieStorage } from './recoilCookiesStorage';
 
  
@@ -62,4 +64,31 @@ export const userState = atom<UserType | null>({
   key: 'userState',
   default: null,
   effects_UNSTABLE: [persistAtom],
+});
+
+
+export const attachToken = selector({
+  key: "useToken",
+  get: ({ get }) => {
+    const userAuthData = get(authState);
+    
+    if (userAuthData && userAuthData.access) {
+      return axios.interceptors.request.use(function (config) {
+        const token = userAuthData?.access;
+        const decodedToken = jwtDecode(token);
+        const dateNow = new Date();
+        if (decodedToken?.exp * 1000 < dateNow?.getTime()) {
+          const setAuth = useSetRecoilState(authState); 
+          setAuth(null);
+          setAuth(null); // Or set empty auth
+          window.location.href = "/sign-in"; // Redirect to login page
+          return Promise.reject(error);
+        }
+        config.headers.Authorization = `Bearer ${token}`;
+        
+        return config;
+      });
+    }
+    return null;
+  },
 });

@@ -23,8 +23,13 @@ export default function Header() {
 
   const handleClickOutside = (e: any) => {
     if (popupRef.current && !popupRef.current.contains(e.target)) {
-      setAccountDropDownIsOpen(false);
+      // setAccountDropDownIsOpen(false);
+      setTimeout(() => setAccountDropDownIsOpen(false), 100);
     }
+
+    
+  // if (popupRef.current && !popupRef.current.contains(e.target)) {
+  // }
   };
 
   useEffect(() => {
@@ -39,6 +44,7 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [accountDropDownisOpen]);
+
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -99,7 +105,9 @@ export default function Header() {
               ) : auth ? (
                 <div key={index} className="relative">
                   <i
+                    // onMouseDown={togglePopup}
                     onClick={togglePopup}
+                    // onClick={togglePopup}
                     className={`pi pi-user hover:bg-green-100 cursor-pointer p-2 text-gray-500 text-sm rounded-lg border border-gray-200 transition-all`}
                   ></i>
                   {accountDropDownisOpen && (

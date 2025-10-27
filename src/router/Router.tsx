@@ -17,6 +17,7 @@ import UserLayout from './layouts/UserLayout';
 import CartPage from '../pages/main/CartPage';
 import AccountSettingsPage from '../pages/main/authorised/AccountSettingsPage';
 import CheckoutPage from '../pages/main/authorised/CheckoutPage';
+import OrderConfirmationPage from '../pages/main/OrderConfirmationPage';
 
 
 const router = createBrowserRouter([
@@ -137,7 +138,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [ 
       {
+        path: '',
+        element: <Dashboard />
+      },
+      {
         path: 'dashboard',
+        element: <Dashboard />
+      },
+      {
+        path: 'dashboard/:div',
         element: <Dashboard />
       },
       {
@@ -148,6 +157,10 @@ const router = createBrowserRouter([
         path: 'order/checkout',
         element: <CheckoutPage />
       },
+      {
+        path: 'order/comfirmation/:ref_id/:ref',
+        element: <OrderConfirmationPage />
+      },
     ]
   },
   
@@ -157,12 +170,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [ 
       {
-        path: 'register',
-        element: <Register />
+        path: '',
+        element: <LoginThree />
       },
       {
         path: 'login',
         element: <LoginThree />
+      },
+      {
+        path: 'register',
+        element: <Register />
       },
     ]
   },

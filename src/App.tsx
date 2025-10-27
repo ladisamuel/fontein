@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from './router/Router';
 import { ToastContainer } from 'react-toastify';
 import { RecoilRoot } from 'recoil';
-// import Interceptor from './Interceptor';
+import Interceptor from './Interceptor';
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
         newestOnTop={false}
         closeOnClick
         /> 
-        {/* <Interceptor   /> */}
+        <Interceptor />
         <RouterProvider router={router} />
       </RecoilRoot>
   )
