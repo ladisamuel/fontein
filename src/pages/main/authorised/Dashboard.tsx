@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
-import { Car, Wrench, ShoppingCart, Search, Bookmark, Package, MessageSquare } from 'lucide-react';
+import { Car, Wrench, ShoppingCart, Search, Package } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { cartState } from '../../../utils/atom/cartAtom';
 import { repairRequestState } from '../../../utils/atom/repairAtom';
-import { getOrdersAPI } from '../../../utils/api/ordersAPI';
 import DashboardSummary from '../../../components/DashboardSummary';
 import DashboardOrder from '../../../components/DashboardOrder';
 import { authState } from '../../../utils/atom/authAtom';
-
-
-
 
 const Dashboard: React.FC = () => {
   const user = useRecoilValue(authState)
@@ -22,9 +18,9 @@ const Dashboard: React.FC = () => {
       const cart = useRecoilValue(cartState)
 
   const getUserOrders: any = async () => {
-    await getOrdersAPI().then((res)=>{
-      // console.log('user orders response', res)
-    })
+    // await getOrdersAPI().then((res)=>{
+    //   // console.log('user orders response', res)
+    // })
   }
   
   const p_pages = [

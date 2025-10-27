@@ -1,8 +1,4 @@
-import { Bookmark, Calendar, Car, MessageSquare, Package, ShoppingCart, Wrench } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { repairRequestState } from '../utils/atom/repairAtom'
-import { useRecoilValue } from 'recoil'
-import { cartState } from '../utils/atom/cartAtom'
+import { Calendar, Car, MessageSquare, Wrench } from 'lucide-react'
 
 export default function DashboardSummary() {
     
