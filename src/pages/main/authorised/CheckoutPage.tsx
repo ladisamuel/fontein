@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../../utils/atom/authAtom";
 import PaystackPaymentButton from "../../../components/PaystackPaymentButton";
-import { toast } from "react-toastify";
+
 
 const CheckoutPage: React.FC = () => {
   const auth = useRecoilValue(authState);

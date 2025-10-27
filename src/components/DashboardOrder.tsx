@@ -1,5 +1,5 @@
 import React from 'react';
-import { Car, Wrench, ShoppingCart, Search, Bookmark, Calendar, Package, Filter, MessageSquare } from 'lucide-react';
+import { Car, Wrench, Calendar } from 'lucide-react';
 
 const DashboardOrder: React.FC = () => {
   return (

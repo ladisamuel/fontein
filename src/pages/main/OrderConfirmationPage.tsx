@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  FileText, ShoppingBag, MapPin, DollarSign, CheckCircle, 
-  Mail, Download, CreditCard, Calendar, Truck, FileCheck,
+  FileText, ShoppingBag, MapPin, CheckCircle, 
+  Mail, Download, Calendar, Truck, FileCheck,
   MessageSquare, LayoutDashboard, Shield
 } from 'lucide-react';
-import { data, useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getSingleOrderAPI } from '../../utils/api/ordersAPI';
 import { formatDate } from '../../utils/generals';
 
