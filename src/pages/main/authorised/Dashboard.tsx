@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Car, Wrench, ShoppingCart, Search, Package } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { cartState } from '../../../utils/atom/cartAtom';
 import { repairRequestState } from '../../../utils/atom/repairAtom';
@@ -9,9 +9,10 @@ import DashboardOrder from '../../../components/DashboardOrder';
 import { authState } from '../../../utils/atom/authAtom';
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate()
   const user = useRecoilValue(authState)
   const location = useParams()
-  const dashboardDiv = location.div;
+  const dashboardDiv = location?.div;
   const [profilePage, setProfilePage] = React.useState<string>('summary');
   
       const repairData = useRecoilValue(repairRequestState)
@@ -34,10 +35,16 @@ const Dashboard: React.FC = () => {
     },
   ]
 
+ const goto = (link: string) => {
+   setProfilePage(link)
+  navigate(`/user/dashboard/${link}`)
 
+ }
   useEffect(()=> {
     getUserOrders()
+    
     if (dashboardDiv) {
+      
       setProfilePage(dashboardDiv)
     } else {
       setProfilePage('summary')
@@ -74,23 +81,23 @@ const Dashboard: React.FC = () => {
         
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Link to='/user/dashboard/summary' className="bg-white rounded-lg shadow-sm p-6">
+          <button type='button' onClick={()=>goto('summary')} className="bg-white text-left rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-gray-600 text-sm">Summary</h3>
               <ShoppingCart size={20} className="text-gray-400" />
             </div>
             <p className="text-3xl font-bold text-gray-900">{cart.length}</p>
             <p className="text-sm text-gray-500 mt-1">+1 new</p>
-          </Link>
+          </button>
 
-          <Link to='/user/dashboard/orders' className="bg-white rounded-lg shadow-sm p-6">
+          <button type='button' onClick={()=>goto('orders')} className="bg-white  text-left rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-gray-600 text-sm">Orders</h3>
               <Package size={20} className="text-gray-400" />
             </div>
             <p className="text-3xl font-bold text-gray-900">3</p>
             <p className="text-sm text-gray-500 mt-1">2 shipping</p>
-          </Link>
+          </button>
 
           <Link to='/cart' className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
@@ -117,7 +124,6 @@ const Dashboard: React.FC = () => {
     {
       p_pages.map((page)=>{
         if (page.name === profilePage) {
-          console.log(page)
           return <page.page /> 
         }
  
@@ -128,7 +134,9 @@ const Dashboard: React.FC = () => {
  
         </div> */}
 
-        {/* Quick Actions */}
+          {/* Quick Actions */}
+        {
+          profilePage === 'summary' ?
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -150,6 +158,8 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
         </div>
+          :''
+        }
       </main>
     </div>
   );

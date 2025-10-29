@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { PaystackButton } from "react-paystack";
-import { createNewOrderAPI } from "../utils/api/ordersAPI";
 
 interface PaystackProps {
   className?: string;
@@ -15,74 +14,6 @@ interface PaystackProps {
   // disabled?: boolean;
 }
 
-
-/*
-
-{
-    "id": "FNT20251026121912PJzT8yORD",
-    "py_ref": "T332890738232430",
-    "status": "('PENDING', 'pending')",
-    "details": {
-        "userDetails": {
-            "fullName": "SupryTech",
-            "email": "suprytech@email.com",
-            "phone": "+2347051900086",
-            "address": "Shop 18, Irepodun Ultra shopping complex.",
-            "city": "Ikeja",
-            "state": "lagos",
-            "country": "Nigeria",
-            "zip": "200282",
-            "notes": "Call 30 mins before arrival"
-        },
-        "deliveryMethod": "home",
-        "totalBalance": [
-            {
-                "name": "subtotal",
-                "amount": 15023233
-            },
-            {
-                "name": "taxes",
-                "amount": 7450
-            },
-            {
-                "name": "total",
-                "amount": 15030683
-            }
-        ],
-        "productItems": [
-            {
-                "id": 3,
-                "make": "Toyota",
-                "model": "venza",
-                "year": 2015,
-                "quantity": 1,
-                "price": 15000000
-            },
-            {
-                "id": 1,
-                "make": "Toyota",
-                "model": "dkkjk",
-                "year": 2018,
-                "quantity": 1,
-                "price": 23233
-            }
-        ],
-        "reference": {
-            "reference": "T332890738232430",
-            "trans": "5469428113",
-            "status": "success",
-            "message": "Approved",
-            "transaction": "5469428113",
-            "trxref": "T332890738232430",
-            "redirecturl": "?trxref=T332890738232430&reference=T332890738232430"
-        }
-    },
-    "created_at": "2025-10-26T19:19:12.725964Z",
-    "updated_at": "2025-10-26T19:19:12.725964Z",
-    "user": "1",
-    "coupon": null
-}
-*/
 
 
 const PaystackPaymentButton: React.FC<
@@ -190,30 +121,15 @@ const PaystackPaymentButton: React.FC<
     text: "Pay Now",
     onSuccess: async (reference: any) => {
      
-      if (onSuccess) {
-        await createNewOrderAPI({...payload, reference}).then((res)=>{
-          console.log('Order created successfully', res.data)
-        });
-        onSuccess({...payload,
-          reference: reference,
-        });
+      if (onSuccess) { 
+        onSuccess(reference);
       }
     },
     onClose: () => {
-      console.log("Payment closed");
       if (onClose) onClose();
     },
   };
-
-  useEffect(()=>{
-    console.log('In payment button useeffect')
-    console.log('amount,', amount * 100)
-    console.log('publicKey', publicKey)
-    console.log('email', email)
-    console.log('payload', payload)
-    console.log('In payment button useeffect')
-    
-  }, [])
+ 
   return (
     <PaystackButton
     className={`bg-green-600 hover:bg-green-700 text-white px-4 py-2 w-full rounded-md font-semibold ${
@@ -226,8 +142,3 @@ const PaystackPaymentButton: React.FC<
 
 export default PaystackPaymentButton;
 
-// className={`bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-semibold ${className || ''}`}
-  // disabled={disabled} // This prevents Paystack popup when form invalid
-
-  // won n se e - they are doing you
-  // se won se e ni - are they doing you?

@@ -1,108 +1,169 @@
-import React from 'react';
-import { Car, Wrench, Calendar } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Car } from "lucide-react";
+import { getOrdersAPI } from "../utils/api/ordersAPI";
+import { Link } from "react-router-dom";
 
 const DashboardOrder: React.FC = () => {
+  const [dataState, setDataState] = useState<any>();
+
+  const getAllOrder = async () => {
+    await getOrdersAPI().then((res) => {
+      console.log("order total", res.data.results[0].details?.totalBalance);
+      console.log("order total. length", res.data.results[0].details?.totalBalance.length);
+      console.log("order total.lenth - 2", res.data.results[0].details?.totalBalance?.[length+2]?.amount);
+      setDataState(res?.data);
+    });
+  };
+
+  useEffect(() => {
+    getAllOrder();
+  }, []);
   return (
     <div className="">
- 
-
-        {/* Recent Orders and Upcoming Service */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Recent Orders */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
-              <div className="flex gap-4 text-sm">
-                <button className="text-blue-600 font-medium">All</button>
-                <button className="text-gray-500 hover:text-gray-700">In transit</button>
-                <button className="text-gray-500 hover:text-gray-700">Delivered</button>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Vehicle</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Order ID</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Status</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Total</th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b">
-                    <td className="py-4 px-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Car size={24} className="text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">2021 Toyota</p>
-                          <p className="text-sm text-gray-500">Camry SE</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-2 text-gray-700">#ORD-2193</td>
-                    <td className="py-4 px-2">
-                      <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium">In transit</span>
-                    </td>
-                    <td className="py-4 px-2 font-medium text-gray-900">$21,500</td>
-                    <td className="py-4 px-2">
-                      <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">Track</button>
-                    </td>
-                  </tr>
-
-                  <tr className="border-b">
-                    <td className="py-4 px-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Car size={24} className="text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">2020 Mazda</p>
-                          <p className="text-sm text-gray-500">CX-5 Grand Touring</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-2 text-gray-700">#ORD-2051</td>
-                    <td className="py-4 px-2">
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">Delivered</span>
-                    </td>
-                    <td className="py-4 px-2 font-medium text-gray-900">$24,900</td>
-                    <td className="py-4 px-2">
-                      <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">Invoice</button>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td className="py-4 px-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Car size={24} className="text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">2019 Honda Fit</p>
-                          <p className="text-sm text-gray-500">EX-L</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-2 text-gray-700">#ORD-1987</td>
-                    <td className="py-4 px-2">
-                      <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Processing</span>
-                    </td>
-                    <td className="py-4 px-2 font-medium text-gray-900">$13,200</td>
-                    <td className="py-4 px-2">
-                      <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">Details</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+      {/* Recent Orders and Upcoming Service */}
+      <div className="grid grid-cols-1lg:grid-cols-3 gap-6 mb-8">
+        {/* Recent Orders */}
+        <div className="lgcol-span-2 bg-white rounded-lg shadow-sm p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
+            <div className="flex gap-4 text-sm">
+              <button className="text-blue-600 font-medium">All</button>
+              <button className="text-gray-500 hover:text-gray-700">
+                In transit
+              </button>
+              <button className="text-gray-500 hover:text-gray-700">
+                Delivered
+              </button>
             </div>
           </div>
 
-          {/* Upcoming Service */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">
+                    Order ID
+                  </th>
+                  <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">
+                    Vehicle
+                  </th>
+                  <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">
+                    Status
+                  </th>
+                  <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">
+                    Total
+                  </th>
+                  <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* details.productItems */}
+                {dataState?.results?.map((item: any)=>(
+                <tr key={item.id} className="border-b">
+                  <td className="py-4 px-2 text-gray-700">#{item?.id}</td>
+                  <td className="py-4 px-2">
+                    {item?.details?.productItems?.length}
+                    {/* <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <Car size={24} className="text-gray-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">2020 Mazda</p>
+                        <p className="text-sm text-gray-500">
+                          CX-5 Grand Touring
+                        </p>
+                      </div>
+                    </div> */}
+                  </td>
+                  <td className="py-4 px-2">
+                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                      
+                      {item?.status.toLowerCase().includes("pending") ? 'pending' : item?.status}
+                    </span>
+                  </td>
+                  <td className="py-4 px-2 font-medium text-gray-900">
+                    
+                    #{item?.details?.totalBalance?.[length+2]?.amount}
+                    {/* 
+                    // .details?.totalBalance?.[length-1].name}
+                     */}
+                  </td>
+                  <td className="py-4 px-2">
+                    <Link to={`/user/order/comfirmation/ref/${item.id}`} className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                      Invoice
+                    </Link>
+                  </td>
+                </tr>
+                  ))}
+
+
+
+                <tr className="border-b">
+                  <td className="py-4 px-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <Car size={24} className="text-gray-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">2021 Toyota</p>
+                        <p className="text-sm text-gray-500">Camry SE</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-2 text-gray-700">#ORD-2193</td>
+                  <td className="py-4 px-2">
+                    <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium">
+                      In transit
+                    </span>
+                  </td>
+                  <td className="py-4 px-2 font-medium text-gray-900">
+                    $21,500
+                  </td>
+                  <td className="py-4 px-2">
+                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                      Track
+                    </button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="py-4 px-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <Car size={24} className="text-gray-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          2019 Honda Fit
+                        </p>
+                        <p className="text-sm text-gray-500">EX-L</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-2 text-gray-700">#ORD-1987</td>
+                  <td className="py-4 px-2">
+                    <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
+                      Processing
+                    </span>
+                  </td>
+                  <td className="py-4 px-2 font-medium text-gray-900">
+                    $13,200
+                  </td>
+                  <td className="py-4 px-2">
+                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Upcoming Service */}
+        {/* <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Upcoming Service</h2>
               <button className="text-sm text-gray-600 flex items-center gap-1 hover:text-gray-900">
@@ -140,9 +201,8 @@ const DashboardOrder: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-  
+          </div> */}
+      </div>
     </div>
   );
 };

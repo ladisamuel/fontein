@@ -35,7 +35,9 @@ const CheckoutPage: React.FC = () => {
   const { state } = useLocation();
 
   const handlePaymentSuccess = (ref: any) => {
-    navigate(`/user/order/comfirmation/py_ref/${ref.reference.reference}`);
+    console.log('the main ref', ref);
+    
+    navigate(`/user/order/comfirmation/py_ref/${ref.reference}`);
   };
 
 //   {
