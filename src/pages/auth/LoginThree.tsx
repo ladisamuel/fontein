@@ -182,12 +182,12 @@ const LoginThree: React.FC = () => {
                    
                   {/* Forgot Password Link */}
                   <div className="text-right">
-                    <a
-                      href="#"
+                    <Link
+                      to="/auth/forgot-password"
                       className="text-green-500 hover:text-green-600 text-sm transition-colors duration-200"
                     >
                       Forgot password?
-                    </a>
+                    </Link>
                   </div>
 
                   {/* Login Button */}

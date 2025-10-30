@@ -52,6 +52,8 @@ const Dashboard: React.FC = () => {
     
   }, [])
 
+  useEffect(() => {},[dashboardDiv])
+
   return (
     <div className="min-h-screen bg-gray-50 mt-[12vh]">
       <main className="px-6 lg:px-[150px] py-8">

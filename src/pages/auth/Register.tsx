@@ -23,6 +23,8 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const auth = useSetRecoilState(authState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [ pass_visible, setPass_visible] = useState<boolean>(false);
+  const [ pass2_visible, setPass2_visible] = useState<boolean>(false);
 
   const onSubmit = async (values: RegisterFormValues) => {
     setIsLoading(true);
@@ -31,10 +33,15 @@ const Register: React.FC = () => {
       .then((res) => {
         toast.success("User created successfully");
         auth(res?.data);
+        console.log('response after register', res?.data)
         navigate("/user/dashboard");
       })
       .catch((err) => {
-        if (err) {
+        
+        if (err?.response?.data?.email?.[0] === 'user with this email already exists.') {
+          console.log('err response', err?.response?.data)
+          toast.error("User already exists");
+        } else if (err) {
           toast.error("Account create failed");
         }
       });
@@ -135,23 +142,28 @@ const Register: React.FC = () => {
                     Password <span className="text-sm text-red-500">*</span>
                   </label>
 
+                  <div className="relative">
+
                   <input
                     name="password"
-                    type="password"
+                    type={pass_visible ? '': 'password'}
                     value={values.password}
                     onBlur={handleBlur}
                     placeholder="********"
                     onChange={handleChange}
                     // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none focus:ring-green-500 focus:border-transparent transition-all"
+                    className="text-sm w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none focus:ring-green-500 focus:border-transparent transition-all"
                     required
                   />
 
+                  <i onClick={()=>setPass_visible(!pass_visible)} className={`pi ${pass_visible ? 'pi-eye-slash':'pi-eye'} absolute right-0 rounded-xl top-1/2 -translate-y-1/2 p-3 text-green-400 bg-green-100  `}></i>
+                  </div>
                   {errors.password && touched.password && (
                     <p className="error text-sm text-red-400">
                       {errors.password}
                     </p>
                   )}
+                  
                 </div>
 
                 {/* Password2 Field */}
@@ -159,10 +171,10 @@ const Register: React.FC = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Enter Password Again <span className="text-sm text-red-500">*</span>
                   </label>
-
+                  <div className="relative">
                   <input
                     name="password2"
-                    type="password2"
+                    type={pass2_visible ? '': 'password'}
                     value={values.password2}
                     onBlur={handleBlur}
                     placeholder="********"
@@ -172,22 +184,16 @@ const Register: React.FC = () => {
                     required
                   />
 
+                  <i onClick={()=>setPass2_visible(!pass2_visible)} className={`pi ${pass2_visible ? 'pi-eye-slash':'pi-eye'} absolute right-0 rounded-xl top-1/2 -translate-y-1/2 p-3 text-green-400 bg-green-100  `}></i>
+                </div>
                   {errors.password2 && touched.password2 && (
                     <p className="error text-sm text-red-400">
                       {errors.password2}
                     </p>
                   )}
+                  
                 </div>
-
-                {/* Forgot Password Link */}
-                <div className="text-right">
-                  <a
-                    href="#"
-                    className="text-green-500 hover:text-green-600 text-sm transition-colors duration-200"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
+ 
 
                 {/* Login Button */}
                 <button

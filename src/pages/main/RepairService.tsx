@@ -236,7 +236,8 @@ const AutoTradePro: React.FC = () => {
                     <span>REGISTERED</span>
                   </div>
                   <div className="mt-2 text-sm">
-                    DMV 2023415 • STATE NEW YORK
+                    {/* DMV 2023415 • STATE NEW YORK */}
+                    Vehicle Inspection / Repair
                   </div>
                   <div className="text-2xl font-bold mt-2">MOTOR VEHICLE</div>
                 </div>

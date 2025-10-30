@@ -18,6 +18,8 @@ import CartPage from '../pages/main/CartPage';
 import AccountSettingsPage from '../pages/main/authorised/AccountSettingsPage';
 import CheckoutPage from '../pages/main/authorised/CheckoutPage';
 import OrderConfirmationPage from '../pages/main/OrderConfirmationPage';
+import ForgotPassword from '../pages/auth/ForgotPassword';
+import PasswordRecovery from '../pages/auth/PasswordRecovery';
 
 
 const router = createBrowserRouter([
@@ -180,6 +182,14 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />
+      },
+      {
+        path: 'forgot-password',
+        element: <ForgotPassword />
+      },
+      {
+        path: 'password-recovery',
+        element: <PasswordRecovery />
       },
     ]
   },

@@ -22,8 +22,10 @@ const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useRecoilState<any>(cartState);
   const [cartItems, setCartItems] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   
   const getItems = async () => {
+    setLoading(true);
     const payload = `id=` + cart;
     await searchVehiclesAPI(payload).then((res) => {
       const results = res.data.results.map((item: any) => ({
@@ -34,6 +36,8 @@ const CartPage: React.FC = () => {
 
       setCartItems(results);
     });
+    setLoading(false);
+
   };
 
   const [promoCode, setPromoCode] = useState("");
@@ -146,7 +150,15 @@ const CartPage: React.FC = () => {
 
                 {/* Cart Items List */}
                 <div className="divide-y divide-gray-200">
-                  {cartItems.map((item: any) => (
+                  
+                  {loading ? <div className="h-[40vh]">
+                    <div className="relative flex justify-center items-center h-full">
+                      <div className=" pi-spin rounded-full border-8 border-t-8 border-t-gray-400 border-gray-200 h-20 w-20">
+                      </div>
+                        <p className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 text-sm">Loading</p>
+                    </div>
+                  </div>:
+                  cartItems.map((item: any) => (
                     <div
                       key={item?.id}
                       className="p-6 hover:bg-gray-50 transition"
@@ -247,6 +259,7 @@ const CartPage: React.FC = () => {
                       </div>
                     </div>
                   ))}
+                  
                 </div>
 
                 {/* Promo Code Section */}

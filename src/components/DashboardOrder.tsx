@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Car } from "lucide-react";
 import { getOrdersAPI } from "../utils/api/ordersAPI";
 import { Link } from "react-router-dom";
 
@@ -61,7 +60,7 @@ const DashboardOrder: React.FC = () => {
               <tbody>
                 {/* details.productItems */}
                 {dataState?.results?.map((item: any)=>(
-                <tr key={item.id} className="border-b">
+                <tr key={item.id} className="border-b border-b-gray-200">
                   <td className="py-4 px-2 text-gray-700">#{item?.id}</td>
                   <td className="py-4 px-2">
                     {item?.details?.productItems?.length}
@@ -91,72 +90,14 @@ const DashboardOrder: React.FC = () => {
                      */}
                   </td>
                   <td className="py-4 px-2">
-                    <Link to={`/user/order/comfirmation/ref/${item.id}`} className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                      Invoice
+                    <Link to={`/user/order/comfirmation/ref/${item.id}`} className="btn_primary rounded text-white font-medium text-xs px-3 py-2">
+                      VIEW
                     </Link>
                   </td>
                 </tr>
                   ))}
 
 
-
-                <tr className="border-b">
-                  <td className="py-4 px-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Car size={24} className="text-gray-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">2021 Toyota</p>
-                        <p className="text-sm text-gray-500">Camry SE</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-4 px-2 text-gray-700">#ORD-2193</td>
-                  <td className="py-4 px-2">
-                    <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium">
-                      In transit
-                    </span>
-                  </td>
-                  <td className="py-4 px-2 font-medium text-gray-900">
-                    $21,500
-                  </td>
-                  <td className="py-4 px-2">
-                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                      Track
-                    </button>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="py-4 px-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Car size={24} className="text-gray-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          2019 Honda Fit
-                        </p>
-                        <p className="text-sm text-gray-500">EX-L</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-4 px-2 text-gray-700">#ORD-1987</td>
-                  <td className="py-4 px-2">
-                    <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
-                      Processing
-                    </span>
-                  </td>
-                  <td className="py-4 px-2 font-medium text-gray-900">
-                    $13,200
-                  </td>
-                  <td className="py-4 px-2">
-                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                      Details
-                    </button>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>

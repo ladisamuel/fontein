@@ -1,8 +1,14 @@
-import { Calendar, Car, MessageSquare, Wrench } from 'lucide-react'
+import { Calendar, Car, Wrench } from 'lucide-react'
+import { useRecoilValue } from 'recoil'
+import { repairRequestState } from '../utils/atom/repairAtom'
+import { formatDate } from '../utils/generals'
+import noDataImg from '../assets/icons/nodataImage.jpg';
+import { Link } from 'react-router-dom';
 
 export default function DashboardSummary() {
-    
+  const repair = useRecoilValue<any>(repairRequestState)
 
+    
   return (
     <div>
         
@@ -15,7 +21,7 @@ export default function DashboardSummary() {
               <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
               <div className="flex gap-4 text-sm">
                 <button className="text-green-600 font-medium">All</button>
-                <button className="text-gray-500 hover:text-gray-700">In transit</button>
+                {/* <button className="text-gray-500 hover:text-gray-700">In transit</button> */}
                 <button className="text-gray-500 hover:text-gray-700">Delivered</button>
               </div>
             </div>
@@ -50,7 +56,7 @@ export default function DashboardSummary() {
                     </td>
                     <td className="py-4 px-2 font-medium text-gray-900">$21,500</td>
                     <td className="py-4 px-2">
-                      <button className="text-green-600 hover:text-green-700 font-medium text-sm">Track</button>
+                      <button className="text-green-600 hover:text-green-700 font-medium text-sm cursor-pointer">View</button>
                     </td>
                   </tr>
 
@@ -100,10 +106,10 @@ export default function DashboardSummary() {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-end">
-            <button className='btn_primary transition-all duration-300 py-1 px-4 text-white rounded-lg text-sm'>View All</button>
+            {/* <div className="flex justify-end mt-5">
+            <button onClick={goto} className='btn_primary transition-all duration-300 py-1 px-4 text-white rounded-lg text-sm'>View All</button>
 
-            </div>
+            </div> */}
           </div>
 
           {/* Upcoming Service */}
@@ -117,39 +123,29 @@ export default function DashboardSummary() {
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-start gap-3 pb-4 border-b">
+
+              {repair ? <div className="flex items-start gap-3 pb-4 border-b-gray-200 border-b">
                 <Wrench size={20} className="text-gray-600 mt-1" />
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">Oil Change - Camry SE</p>
-                  <p className="text-sm text-gray-500 mt-1">12 Oct, 10:00</p>
+                  <p className="font-medium text-gray-900">{repair?.request_type} - {repair?.year} {repair?.make} {repair?.model}</p>
+                  <p className="text-sm text-gray-500 mt-1"><span className='font-bold'>{formatDate(repair?.preferred_date)} </span> {repair?.preferred_time.toUpperCase()}</p>
                 </div>
               </div>
-
-              <div className="flex items-start gap-3 pb-4 border-b">
-                <div className="w-5 h-5 flex items-center justify-center mt-1">
-                  <div className="w-4 h-0.5 bg-gray-600"></div>
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">Brake Inspection - CX-5</p>
-                  <p className="text-sm text-gray-500 mt-1">18 Oct, 14:30</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 mt-1 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">Tire Rotation - Honda Fit</p>
-                  <p className="text-sm text-gray-500 mt-1">24 Oct, 09:00</p>
-                </div>
-              </div>
+               : 
+               <div className="p-5 lg:p-0">
+                <img src={noDataImg} alt="" />
+               </div>
+               }
+              
+            </div>
+            <div className="pt-4 flex justify-end">
+              <Link to='/repair' className='btn_primary transition-all duration-300 py-2 px-4 text-white rounded-lg text-sm'>Request Service</Link>
             </div>
           </div>
 
           
           {/* Support Messages */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          {/* <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Support Messages</h2>
               <button className="text-sm text-gray-600 flex items-center gap-1 hover:text-gray-900">
@@ -189,7 +185,7 @@ export default function DashboardSummary() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
     </div>
