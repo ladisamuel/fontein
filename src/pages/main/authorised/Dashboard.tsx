@@ -122,9 +122,9 @@ const Dashboard: React.FC = () => {
         </div>
 
     {
-      p_pages.map((page)=>{
+      p_pages.map((page, index)=>{
         if (page.name === profilePage) {
-          return <page.page /> 
+          return <page.page key={index} /> 
         }
  
       })
