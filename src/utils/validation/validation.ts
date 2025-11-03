@@ -20,6 +20,19 @@ const registerUserValidation = yup.object().shape({
       .required("Required"),
   }).strict(true);
 
+const resetPasswordValidation = yup.object().shape({
+    password: yup
+      .string()
+      .min(5)
+      .max(25)
+      .matches(passwordRule, "Password must contain at least one number, one lowercase letter, and one uppercase letter")
+      .required("Password is Required"),
+    password2: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required("Required"),
+  }).strict(true);
+
 // Define the login validation schema
 const loginUserValidation = yup.object().shape({
   email: yup.string().email("Please enter a valid email").required("Required"),
@@ -28,14 +41,10 @@ const loginUserValidation = yup.object().shape({
     .required("Required"),
 });
 
-
-
-
 // Define the ForgotPassword validation schema
 const forgotPasswordValidation = yup.object().shape({
   email: yup.string().email("Please enter a valid email").required("Required"),
 });
-
 
 const repairVAlidation = yup.object().shape({
   full_name: yup.string().required('Please enter your name!'),
@@ -59,8 +68,6 @@ const repairVAlidation = yup.object().shape({
   
 })
 
-
-
 // Define the login validation schema
 const contactFormValidation = yup.object().shape({
   full_name: yup.string(),
@@ -78,4 +85,5 @@ export {
 
     repairVAlidation,
     contactFormValidation,
+    resetPasswordValidation,
  };

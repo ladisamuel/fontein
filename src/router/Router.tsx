@@ -19,7 +19,9 @@ import AccountSettingsPage from '../pages/main/authorised/AccountSettingsPage';
 import CheckoutPage from '../pages/main/authorised/CheckoutPage';
 import OrderConfirmationPage from '../pages/main/OrderConfirmationPage';
 import ForgotPassword from '../pages/auth/ForgotPassword';
-import PasswordRecovery from '../pages/auth/PasswordRecovery';
+import PasswordReset from '../pages/auth/PasswordReset';
+import AccountVerifyCodePage from '../pages/auth/AccountVerifyCodePage';
+import PasswordResetConfirmation from '../pages/auth/PasswordResetConfirmation';
 
 
 const router = createBrowserRouter([
@@ -188,8 +190,16 @@ const router = createBrowserRouter([
         element: <ForgotPassword />
       },
       {
-        path: 'password-recovery',
-        element: <PasswordRecovery />
+        path: 'change-password/:uid/:token',
+        element: <PasswordReset />
+      },
+      {
+        path: 'reset-password-success',
+        element: <PasswordResetConfirmation />
+      },
+      {
+        path: 'verify-account/:id/:verification_token',
+        element: <AccountVerifyCodePage />
       },
     ]
   },

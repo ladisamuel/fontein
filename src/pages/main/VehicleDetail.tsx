@@ -8,7 +8,7 @@ import {
   FaPaintRoller,
   FaShieldAlt,
 } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   createAVehicleEnquiry,
   getAVehicle,
@@ -20,6 +20,7 @@ import { Galleria } from "primereact/galleria";
 import { Dialog } from "primereact/dialog";
 import { useFavoriteVehicle } from "../../utils/hooks/useFavoriteVehicle";
 import { toast } from "react-toastify";
+import SimilarVehicle from "../../components/SimilarVehicle";
 
 const VehicleDetailsPage = () => {
   const galleria: any = useRef(null);
@@ -453,16 +454,13 @@ const VehicleDetailsPage = () => {
                   </span>
                 </p> */}
                 <p className="text-gray-700">
-                  Location: 123 Main St, Anytown, USA.
+                  Location: 123 Main St, Ikeja, Lagos.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button className="bg-primary-green text-white px-4 py-2 rounded bg-green-600 transition">
                   Schedule Test Drive
-                </button>
-                <button className="border border-primary-blue text-primary-blue px-4 py-2 rounded hover:bg-blue-50 transition">
-                  Apply for Financing
-                </button>
+                </button> 
               </div>
             </div>
           </div>
@@ -546,56 +544,5 @@ const FeatureItem = ({ feature }: { feature: string }) => (
     <span className="text-gray-700">{feature}</span>
   </div>
 );
-
-const SimilarVehicle = ({ car }: any) => {
-  const { addVehicleToFavorite, removeVehicleFromFavorite, isFavorite } =
-    useFavoriteVehicle();
-
-  const carId = () => {
-    const id = typeof car?.id === "string" ? car?.id : String(car?.id);
-    return id;
-  };
-
-  const handleFavorite = () => {
-    if (isFavorite(carId())) {
-      removeVehicleFromFavorite(carId());
-      toast.info("Removed from favorite");
-    } else {
-      addVehicleToFavorite(carId());
-      toast.success("Added to favorite");
-    }
-  };
-  return (
-    <div className="border-b border-gray-200 pb-4 last:border-0 last:pb-0 grid grid-cols-[3fr_9fr] gap-3">
-      <div className="">
-        <img src={car?.first_image} className="rounded" alt="" />
-      </div>
-      <div className="">
-        <h3 className="font-semibold text-charcoal">{car?.model}</h3>
-        <p className="text-gray-600 text-sm mb-1">{car?.mileage}</p>
-        <p className="text-primary-blue font-bold">
-          #{parseInt(car?.price).toLocaleString()}
-        </p>
-        <div className=" flex items-center gap-3">
-          <Link
-            to={`product/${car?.id}-${car?.year}-${car?.make}-${car?.model}`}
-            className=" text-white bg-green-600 p-2 rounded hover:underline text-sm font-medium"
-          >
-            View Details
-          </Link>
-          <i
-                    onClick={handleFavorite}
-
-            className={` p-2 cursor-pointer text-orange-600 pi ${
-              isFavorite(carId()) ? "pi-heart-fill" : "pi-heart"
-            } `}
-          ></i>
-        </div>
-      </div>
-    </div>
-  );
-
-  // <p>Similaring carrs</p>
-};
 
 export default VehicleDetailsPage;

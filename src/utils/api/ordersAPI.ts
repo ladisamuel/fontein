@@ -7,6 +7,10 @@ const getOrdersAPI = () => {
     return axios.get(`${BASEURL}`)
 }
 
+const getOrderSummaryAPI = () => {
+    return axios.get(`${BASEURL}summary/`)
+}
+
 const getSingleOrderAPI = (param:string, orderId: string) => {
     return axios.get(`${BASEURL}${orderId}/?lookup=${param}`)
 }
@@ -19,4 +23,5 @@ export {
     getOrdersAPI,
     getSingleOrderAPI,
     createNewOrderAPI,
+    getOrderSummaryAPI,
 }
