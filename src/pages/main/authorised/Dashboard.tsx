@@ -10,6 +10,7 @@ import { authState } from "../../../utils/atom/authAtom";
 import { getOrderSummaryAPI } from "../../../utils/api/ordersAPI";
 import { resendVerificationCode } from "../../../utils/api/userAPI";
 import { Dialog } from "primereact/dialog";
+import { toast } from "react-toastify";
 
 interface SummaryDataINTERFACE {
   summaryInfo: number;
@@ -57,8 +58,11 @@ const Dashboard: React.FC = () => {
       if (res.status === 200) {
         setModalVisible(true);
       }
-    });
-    setLoadingVerify(false);
+    }).catch(() => {
+      toast.error('Failed to resend verification code')
+      setLoadingVerify(false);
+    })
+    ;
   };
 
   const goto = (link: string) => {
