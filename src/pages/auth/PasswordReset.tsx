@@ -165,7 +165,8 @@ const ResetPasswordPage: React.FC = () => {
               </div>
 
               <button
-                disabled={isLoading}
+                    disabled={!isValid || isLoading || isSubmitting}
+
                 className="w-full flex items-center justify-center space-x-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {isLoading ? (

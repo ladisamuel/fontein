@@ -9,7 +9,6 @@ import DashboardOrder from "../../../components/DashboardOrder";
 import { authState } from "../../../utils/atom/authAtom";
 import { getOrderSummaryAPI } from "../../../utils/api/ordersAPI";
 import { resendVerificationCode } from "../../../utils/api/userAPI";
-import { toast } from "react-toastify";
 import { Dialog } from "primereact/dialog";
 
 interface SummaryDataINTERFACE {
