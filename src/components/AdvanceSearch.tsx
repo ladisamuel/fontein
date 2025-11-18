@@ -6,6 +6,7 @@ import searchData from "../utils/searchTerms.json";
 import { separateTexts } from "../utils/generals";
 import { parseQueryString, toQueryString } from "../utils/toQueryString";
 import { toast } from "react-toastify";
+import debounce from "lodash.debounce";
 
 interface Make {
   id: number;

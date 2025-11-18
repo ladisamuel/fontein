@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import { verificationEmailCode } from "../../utils/api/userAPI";
 import { useRecoilState } from "recoil";
 import { authState } from "../../utils/atom/authAtom";
-import type { AuthType } from "../../utils/type/userType";
+// import type { AuthType } from "../../utils/type/userType";
 
 const AccountVerifyCodePage: React.FC = () => {
-  const [userData, setUserData] = useRecoilState<AuthType>(authState)
+  // const [userData, setUserData] = useRecoilState<AuthType>(authState)
+  const [userData, setUserData] = useRecoilState<any>(authState)
   const params = useParams();
   const navigate = useNavigate()
 
