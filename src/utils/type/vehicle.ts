@@ -56,6 +56,26 @@ interface ContactFormType {
 //   premium?: boolean;
 // }
 
+
+// interface AdvancedSearch {
+//   make: string;
+//   model: string;
+//   yearFrom: string;
+//   yearTo: string;
+//   minPrice: string;
+//   maxPrice: string;
+//   mileage: string;
+//   location: string;
+//   bodyType: string;
+//   transmission: string;
+//   drivetrain: string;
+//   fuelType: string;
+//   engine: string;
+//   color: string;
+//   condition: string;
+//   stock: string;
+// }
+
 export type {
     Make,
     VehiclesImage,

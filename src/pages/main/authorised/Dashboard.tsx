@@ -37,6 +37,7 @@ const Dashboard: React.FC = () => {
   const getUserOrders: any = async () => {
     await getOrderSummaryAPI().then((res) => {
       setSummaryData({ ...summaryData, orderInfo: res?.data?.total_orders });
+      console.log('res', res.data)
     });
   };
 
@@ -60,8 +61,8 @@ const Dashboard: React.FC = () => {
       }
     }).catch(() => {
       toast.error('Failed to resend verification code')
-      setLoadingVerify(false);
     })
+    setLoadingVerify(false);
     ;
   };
 
@@ -79,7 +80,9 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {}, [dashboardDiv]);
+  useEffect(() => {
+    
+  }, [dashboardDiv]);
 
   return (
     <div className="min-h-screen bg-gray-50 mt-[12vh]">
@@ -111,10 +114,10 @@ const Dashboard: React.FC = () => {
       </Dialog>
       <main className="px-6 lg:px-[150px] py-8">
         {/* Welcome Section */}
+        {user?.user?.is_onboarded ? '' :
         <div className="bg-white rounded-lg shadow-sm px-6 py-3 mb-6 flex flex-col lg:flex-row gap-y-3 justify-between items-start lg:items-center text-red-500">
           <p>
-            You email is not verified. Please verify your email to access all
-            features and secure your account.
+            You email is not verified. Please verify your email to access all features and secure your account.
           </p>
           {loadingVerify ? (
             <button
@@ -132,6 +135,7 @@ const Dashboard: React.FC = () => {
             </button>
           )}
         </div>
+        }
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6 flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">

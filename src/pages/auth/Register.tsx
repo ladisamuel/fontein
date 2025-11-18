@@ -149,7 +149,7 @@ const Register: React.FC = () => {
                     type={pass_visible ? '': 'password'}
                     value={values.password}
                     onBlur={handleBlur}
-                    placeholder="********"
+                    placeholder={pass_visible ? 'password': "********"}
                     onChange={handleChange}
                     // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                     className="text-sm w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none focus:ring-green-500 focus:border-transparent transition-all"
@@ -177,7 +177,7 @@ const Register: React.FC = () => {
                     type={pass2_visible ? '': 'password'}
                     value={values.password2}
                     onBlur={handleBlur}
-                    placeholder="********"
+                    placeholder={pass_visible ? 'password': "********"}
                     onChange={handleChange}
                     // className="pl-12 w-full py-3 bg-gray-100 rounded-md focus:ring-2 focus:ring-purple-100 focus:outline-none"
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none focus:ring-green-500 focus:border-transparent transition-all"

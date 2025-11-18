@@ -86,7 +86,7 @@ const OrderConfirmationPage: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <CreditCard className="w-4 h-4 text-gray-600" />
                 <span className="font-semibold text-gray-900">
-                  {dataState?.payment_method.toUpperCase()}
+                  {dataState?.payment_method?.toUpperCase()}
                 </span>
               </div>
             </div>
@@ -115,9 +115,24 @@ const OrderConfirmationPage: React.FC = () => {
             </div>
             <div className="text-right">
               <label className="block text-sm text-gray-600 mb-1">Status</label>
+              {dataState?.payment_status.includes('success') ?
               <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                {dataState?.payment_status}
-              </span>
+                Success
+              </span>:
+              dataState?.payment_status.includes('failed') ?
+              <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                Failed
+              </span>:
+              dataState?.payment_status.includes('processing') ?
+              <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                Processing
+              </span>:
+              dataState?.payment_status.includes('cancelled') ?
+              <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                Cancelled
+              </span>:
+              ''
+              }
             </div>
           </div>
         </div>

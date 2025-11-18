@@ -14,6 +14,8 @@
     }
   },
   "make": [ "Toyota", "BMW", "Mercedes", "Ford", "Honda", "Jeep" ],
+
+  "body_type":["Sedan", "Hatchback", "SUV", "Crossover", "Coupe", "Convertible", "Wagon", "Pickup Truck", "Van", "Minivan", "Roadster", "Fastback", "Liftback", "Cabriolet", "Microcar", "Limousine" ],
   
   "filters": {
     "color": ["Black", "White", "Red", "Blue", "Silver", "Other"],

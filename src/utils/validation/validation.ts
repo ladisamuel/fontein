@@ -77,6 +77,15 @@ const contactFormValidation = yup.object().shape({
   message: yup.string().required("Required"),
 });
 
+const otpCodeValidation = yup.object().shape({
+    a: yup.number(),
+    b: yup.number(),
+    c: yup.number(),
+    d: yup.number(),
+    e: yup.number(),
+    f: yup.number(),
+});
+
 
 export { 
     loginUserValidation,
@@ -86,4 +95,5 @@ export {
     repairVAlidation,
     contactFormValidation,
     resetPasswordValidation,
+    otpCodeValidation,
  };

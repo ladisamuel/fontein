@@ -3,8 +3,8 @@ import axios from 'axios';
 const BASEURL = import.meta.env.VITE_BE_URL + 'orders/'
 
 
-const getOrdersAPI = () => {
-    return axios.get(`${BASEURL}`)
+const getOrdersAPI = (limit?: string) => {
+    return axios.get(`${BASEURL}${limit ? '?limit='+limit : ''}`)
 }
 
 const getOrderSummaryAPI = () => {

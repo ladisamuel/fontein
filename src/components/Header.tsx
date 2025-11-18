@@ -5,6 +5,8 @@ import logoImage from "../assets/logo/Logo.jpg";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../utils/atom/authAtom";
 import { cartState } from "../utils/atom/cartAtom";
+import { logoutUser } from "../utils/api/userAPI";
+import { toast } from "react-toastify";
 
 export default function Header() {
   const menu = menuItem;
@@ -31,6 +33,15 @@ export default function Header() {
   // if (popupRef.current && !popupRef.current.contains(e.target)) {
   // }
   };
+
+  const handleUserLogout = async () => {
+    await logoutUser().then((res)=>{
+      if (res.status === 204){
+        setAuth(null)
+        toast.info('User logged out!')
+      }
+    })
+  }
 
   useEffect(() => {
     if (accountDropDownisOpen) {
@@ -148,7 +159,7 @@ export default function Header() {
                           <hr className="border-gray-200" />
                         </li>
                         <li
-                          onClick={() => setAuth(null)}
+                          onClick={handleUserLogout}
                           className="flex justify-center text-xs gap-1 items-center text-red-500 bordert hover:bg-red-50 cursor-pointer py-2 px-2 "
                         >
                           Sign out
@@ -229,7 +240,7 @@ export default function Header() {
                           <hr className="border-gray-200" />
                         </li>
                         <li
-                          onClick={() => setAuth(null)}
+                          onClick={handleUserLogout}
                           className="flex justify-center text-xs gap-1 items-center text-red-500 bordert hover:bg-red-50 cursor-pointer py-2 px-2 "
                         >
                           Sign out

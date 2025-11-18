@@ -22,10 +22,20 @@ const resendVerificationCode = () => {
     return axious.get(`${BASEURL}users/resend_verify_code/`)
 }
 
+const verificationEmailCode = (payload: any) => {
+    return axious.post(`${BASEURL}users/verify_code/`, payload)
+}
+
+const logoutUser = () => {
+    return axious.get(`${BASEURL}users/logout/`,)
+}   
+
 export {
     registerUser,
     loginUser,
     resetPassword,
     setNewPassword,
     resendVerificationCode,
+    verificationEmailCode,
+    logoutUser,
 }

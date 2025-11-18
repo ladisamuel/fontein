@@ -32,5 +32,78 @@ body {
 }
 
 input,  textarea{
-    @apply outline-none;
+    @apply outline-none text-gray-600;
+    /* color: #fef2f2 */
+}
+
+/* p-multiselect-filter-container */
+
+
+
+/* If you want to style all item labels (both checked and unchecked) */
+.p-multiselect-item .p-multiselect-item-label {
+  color: black !important;
+  font-size: 0.875rem;
+}
+
+
+/* Target the checked checkboxes in the dropdown */
+.p-multiselect-item.p-highlight .p-checkbox .p-checkbox-box {
+  @apply text-green-100 bg-green-50;
+
+  /* border-color: red !important; */
+  /* background: red !important; */
+}
+
+/* Check icon: the mark symbole */
+.p-multiselect-item.p-highlight .p-checkbox .p-checkbox-box .p-checkbox-icon {
+  @apply text-red-500;
+  /* color: white !important; */
+}
+
+/* Hover state of the checkbox */
+.p-multiselect-item .p-checkbox .p-checkbox-box:hover {
+  border: solid 3px red !important;
+}
+
+
+.p-multiselect-header {
+  @apply bg-green-100 ;
+  /* background-color: ; */
+  padding: 0 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+
+.p-multiselect-header .p-checkbox .p-checkbox-box {
+  border-color: green !important;
+}
+
+.p-multiselect-header .p-checkbox.p-checkbox-checked .p-checkbox-box {
+  background: green !important;
+  border-color: green !important;
+}
+
+
+/* Style the "Select All" checkbox box */
+.p-multiselect-header .p-checkbox .p-checkbox-box {
+  border-color: red !important;
+  color: red !important ;
+}
+
+
+/* For the slider */
+/* span .p-slider-handle.end  {
+  @apply bg-red-400 
+} */
+/* .p-slider-horizontal  */
+ .p-slider-horizontal {
+  /* @apply relative bg-red-400 */
+ }
+
+.p-slider-range{
+  @apply bg-green-300
+}
+.p-slider .p-slider-handle  {
+  @apply bg-green-500 top-1/2 -translate-y-1/2 hover:bg-green-400
 }

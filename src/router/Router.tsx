@@ -165,6 +165,10 @@ const router = createBrowserRouter([
         path: 'order/comfirmation/:ref_id/:ref',
         element: <OrderConfirmationPage />
       },
+      {
+        path: 'verify-account/:id/:verification_token',
+        element: <AccountVerifyCodePage />
+      },
     ]
   },
   

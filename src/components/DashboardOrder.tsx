@@ -39,7 +39,7 @@ const DashboardOrder: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b">
+                <tr className="border-b border-b-gray-400">
                   <th className="text-left py-3 px-2 text-sm font-semibold text-gray-700">
                     Order ID
                   </th>

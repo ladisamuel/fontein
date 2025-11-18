@@ -4,6 +4,16 @@ import axios from 'axios';
 
 const BASEURL = import.meta.env.VITE_BE_URL
 
+
+const getMake = ()=>{
+    return axios.get(`${BASEURL}mains/make/`)
+}
+
+const getModels = (payload?: any)=>{
+    return axios.post(`${BASEURL}mains/vehicles/get-models/`, payload)
+}
+
+
 const getVehicles = () => {
     return axios.get(`${BASEURL}mains/vehicles/`)
 }
@@ -39,6 +49,8 @@ const contactFormApi = (data:any) => {
 
 
 export {
+    getMake,
+    getModels,
     getVehicles,
     searchVehiclesAPI,
     getAVehicle,

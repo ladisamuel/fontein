@@ -16,21 +16,27 @@ import {
   // Plus,
   Trash2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   authState,
-  //  userState
 } from "../../../utils/atom/authAtom";
+import { Dialog } from "primereact/dialog";
+import { logoutUser } from "../../../utils/api/userAPI";
+import { toast } from "react-toastify";
 
 const AccountSettingsPage: React.FC = () => {
   const userState = useRecoilValue(authState);
+  const setAuth = useSetRecoilState(authState);
+  
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<any>({});
   const [changeBilling, setChangeBilling] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [security, setSecurity] = useState<any>({});
 
-  const [billing, setBilling] = useState<any>({});
+  // const [billing, setBilling] = useState<any>({});
 
   // const [preferences, setPreferences] = useState<any>({});
   const [userData, setUserData] = useState<any>();
@@ -49,13 +55,13 @@ const AccountSettingsPage: React.FC = () => {
   //   communicationWindow: "8am - 6pm (Local)",
   // };
 
-  const bill: any = {
-    cardNumber: "•••• 4242",
-    cardExpiry: "Exp 12/27",
-    billingEmail: "billing@autouser.com",
-    billingAddress: "500 Market St, Austin, TX 78701",
-    deliveryAddress: "742 Evergreen Terrace, Springfield, IL 62701",
-  };
+  // const bill: any = {
+  //   cardNumber: "•••• 4242",
+  //   cardExpiry: "Exp 12/27",
+  //   billingEmail: "billing@autouser.com",
+  //   billingAddress: "500 Market St, Austin, TX 78701",
+  //   deliveryAddress: "742 Evergreen Terrace, Springfield, IL 62701",
+  // };
 
   const profl: any = {
     firstName: "John",
@@ -66,17 +72,64 @@ const AccountSettingsPage: React.FC = () => {
     preferredContact: "Email",
   };
 
+  
+    const handleUserLogout = async () => {
+      await logoutUser().then((res)=>{
+        if (res.status === 204){
+          setAuth(null)
+          navigate("/auth/forgot-password");
+          toast.info('User logged out!')
+        }
+      })
+
+      
+              // onClick={() => {
+              //   resetAuth();
+              // }}
+    }
 
   useEffect(() => {
     setSecurity(secure);
     // setPreferences(pref);
-    setBilling(bill);
+    // setBilling(bill);
     setProfile(profl);
     setUserData(userState?.user);
     console.log(userState?.user);
   }, []);
   return (
     <div className="min-h-screen mt-[12vh] bg-gray-50">
+      <Dialog
+        visible={modalVisible}
+        onHide={() => {
+          if (!modalVisible) return;
+          setModalVisible(false);
+        }}
+        style={{ maxWidth: "400px" }}
+        className="bg-white p-7 rounded-lg"
+        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+      >
+        <div className="bg-green-800 w-fit flex justify-center m-auto items-center rounded-md p-3">
+          <User size={20} className=" text-white" />
+        </div>
+
+        <div className=" text-center flex flex-col gap-3 mx-5">
+          <h4 className=" font-bold text-gray-700">Changed Password Request</h4>
+          <p className="text-gray-500">
+            <span className="font-bold">Please note!</span> You will be logged
+            out to reset your password.
+          </p>
+
+          <div className="text-center">
+            <button 
+                onClick={handleUserLogout}
+
+              className="btn_primary w-fit px-5 py-1 rounded-lg text-white cursor-pointer"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </Dialog>
       {/* Main Content */}
       <div className="max-w-7xl mx-auto main_padding py-8">
         {/* Page Header */}
@@ -172,6 +225,7 @@ const AccountSettingsPage: React.FC = () => {
                 onChange={(e) =>
                   setUserData({ ...userData, email: e.target.value })
                 }
+                placeholder="Enter email"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -181,7 +235,8 @@ const AccountSettingsPage: React.FC = () => {
               </label>
               <input
                 type="tel"
-                value={profile?.phone}
+                value={userData?.phone}
+                placeholder="Enter phone"
                 onChange={(e) =>
                   setProfile({ ...profile, phone: e.target.value })
                 }
@@ -196,7 +251,8 @@ const AccountSettingsPage: React.FC = () => {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  value={profile?.location}
+                  value={userData?.location}
+                placeholder="Enter your location"
                   onChange={(e) =>
                     setProfile({ ...profile, location: e.target.value })
                   }
@@ -235,8 +291,9 @@ const AccountSettingsPage: React.FC = () => {
                 Change Password
               </label>
               <button
+                onClick={() => setModalVisible(true)}
                 type="button"
-                className="px-4 py-2 border bg-gray-900 text-white rounded-lg hover:bg-gray-800"
+                className="px-4 py-2 cursor-pointer border bg-gray-900 text-white rounded-lg hover:bg-gray-800"
               >
                 Proceed to changing your password
               </button>
@@ -283,15 +340,15 @@ const AccountSettingsPage: React.FC = () => {
                 Enabled
               </span>
             </div>
-            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center space-x-3">
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="text-gray-900">
                   Price Alerts & New Listings
                 </span>
               </div>
-              <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                Enabled
+              <span className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm font-medium">
+                Disabled
               </span>
             </div>
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -314,8 +371,7 @@ const AccountSettingsPage: React.FC = () => {
               Billing & Addresses
             </h2>
           </div>
-          {
-            changeBilling ? (
+          {/* {changeBilling ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -358,29 +414,30 @@ const AccountSettingsPage: React.FC = () => {
                 />
               </div>
             </div>
-          ) : (
-            <div
-            className="w-fit"
-            >
+          ) : ( 
+            )}
+           */}
+            <div className="w-fit">
               <p
-              onClick={() => setChangeBilling(!changeBilling)}
-                className="cursor-pointer px-4 py-2 border bg-gray-900 text-white rounded-lg hover:bg-gray-800"
+                onClick={() => setChangeBilling(!changeBilling)}
+                className="cursor-not-allowed px-4 py-2 border bg-gray-500 text-white rounded-lg hover:bg-gray-800"
               >
-                Add billing address {changeBilling ? 'true': 'false'}
+                Add billing address {changeBilling ? "true" : "false"}
               </p>
             </div>
-          )}
 
           <div className="flex justify-between items-center pt-4">
             <p className="text-sm text-gray-500">
-              Manage saved addresses used during checkout.
+              Manage saved card and addresses used during checkout.
             </p>
+              {/* 
             <div className="flex space-x-3">
               <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 text-sm font-medium">
                 <MapPin className="w-4 h-4" />
                 <span>Add Address</span>
-              </button>
+              </button> 
             </div>
+              */}
           </div>
         </div>
 

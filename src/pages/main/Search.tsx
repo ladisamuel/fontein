@@ -3,14 +3,16 @@ import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import searchData from "../../utils/searchTerms.json";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
-import { Skeleton } from 'primereact/skeleton';
+import { Skeleton } from "primereact/skeleton";
 
 import AdvanceSearch from "../../components/AdvanceSearch";
 import { searchVehiclesAPI } from "../../utils/api/products";
-import { toQueryString } from "../../utils/toQueryString";
+import { parseQueryString, toQueryString } from "../../utils/toQueryString";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../utils/atom/authAtom";
 
 interface Vehicle {
   id: number;
@@ -24,6 +26,8 @@ interface Vehicle {
 }
 
 const SearchResultsPage: React.FC = () => {
+  // const userData = useRecoilValue(userState)
+  const user = useRecoilValue(authState);
   const [visible, setVisible] = useState(false);
 
   const [sortBy, setSortBy] = useState("Relevance");
@@ -33,54 +37,49 @@ const SearchResultsPage: React.FC = () => {
   const [filterData, setFilterData] = useState<any>([]);
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
-  >({}); 
+  >({});
 
   const [vehicles, setVehicles] = useState<Vehicle[]>();
 
   const navigate = useNavigate();
-  
+
   const searchVehicles = async (searchOption?: string) => {
     setLoading(true);
 
-      const query = {search: ''}
+    const query = { search: "" };
 
-      if (searchOption && searchOption === 'url') {
-        query.search = window.location.search;
-        
-        const currentFilters = parseQueryString(window.location.search);
-        setSelectedFilters(currentFilters);
-        // console.log( 'search', search);
-      } else {
-        query.search = toQueryString(selectedFilters);
-        const newurl =
-          window.location.protocol +
-          "//" +
-          window.location.host +
-          window.location.pathname +
-          "?" +
-          query.search;
-        window.history.pushState({ path: newurl }, "", newurl);
-        
+    if (searchOption && searchOption === "url") {
+      query.search = window.location.search;
+
+      const currentFilters = parseQueryString(window.location.search);
+      setSelectedFilters(currentFilters);
+      // console.log( 'search', search);
+    } else {
+      query.search = toQueryString(selectedFilters);
+      const newurl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        window.location.pathname +
+        "?" +
+        query.search;
+      window.history.pushState({ path: newurl }, "", newurl);
+    }
+
+    // console.log( search.slice(1,  search.length));
+
+    await searchVehiclesAPI(query.search.slice(0, query.search.length)).then(
+      (res) => {
+        setVehicles(res?.data?.results);
       }
-
-      // console.log( search.slice(1,  search.length));
-      
-    
-    await searchVehiclesAPI(query.search.slice(0, query.search.length)).then((res)=>{
-      setVehicles(res?.data?.results)
-      
-    })
+    );
     // Object.entries(currentFilters).map(([Key, value], index)=>{
     // })
 
-
-
     setLoading(false);
   };
- 
 
   const changeVisibility = (payload: any) => {
- 
     const data = {
       name: Object.keys(payload)[0],
       visibility: false,
@@ -132,7 +131,7 @@ const SearchResultsPage: React.FC = () => {
       ? [...currentValues, value]
       : currentValues.filter((v) => v !== value);
 
-    const updatedFilters : any = {
+    const updatedFilters: any = {
       ...selectedFilters,
       [key]: updatedValues,
     };
@@ -142,49 +141,39 @@ const SearchResultsPage: React.FC = () => {
     }
 
     setSelectedFilters(updatedFilters);
- 
   };
 
-  // get search query from url and parse back to object
-  function parseQueryString(queryString: any) {
-    const params = new URLSearchParams(queryString);
-    const obj: any = {};
+  useEffect(() => {
+    searchVehicles("url");
 
-    for (const [key, value] of params.entries()) {
-      obj[key] = value.split(",").map(decodeURIComponent);
-    }
-    return obj;
-  }
-
-  
-
-  useEffect(()=>{
-    // const currentFilters = parseQueryString(window.location.search);
-    // setSelectedFilters(currentFilters);
-    searchVehicles('url')
-  }, [])
+    console.log("user", user);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 mt-[12vh] ">
       <Dialog
         header="Advance Search"
         visible={visible}
-        style={{ width: "90%", backgroundColor: 'white' }}
+        style={{ width: "90%", backgroundColor: "white" }}
         className="p-2"
         onHide={() => {
           if (!visible) return;
           setVisible(false);
         }}
       >
-        <AdvanceSearch />
-      </Dialog> 
- 
+        <AdvanceSearch
+          closeModel={setVisible}
+          custom_function={setVehicles}
+        />
+      </Dialog>
+
       {/* Search Results Header */}
-      <section 
-      style={{
-        backgroundBlendMode: "multiply"
-      }} className="bg-[#00000096]  bg-gradient-to-r from-green-600 to-purple-600 text-white py-20"
-      // className="bg-green-800 text-white py-12"
+      <section
+        style={{
+          backgroundBlendMode: "multiply",
+        }}
+        className="bg-[#00000096]  bg-gradient-to-r from-green-600 to-purple-600 text-white py-20"
+        // className="bg-green-800 text-white py-12"
       >
         <div className="max-w-7xl mx-auto main_padding text-center">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -197,7 +186,7 @@ const SearchResultsPage: React.FC = () => {
       </section>
 
       <div className="main grid lg:grid-cols-[20%_80%] gap-5 py-5 max-w-7xl mx-auto main_padding">
-        {/* Filter Section */} 
+        {/* Filter Section */}
         <section className="hidden lg:block bg-white p-2 rounded-xl">
           <div className="max-w-7xl mx-auto">
             <div className=" rounded-lg flex flex-wrap gap4 items-center">
@@ -205,7 +194,7 @@ const SearchResultsPage: React.FC = () => {
                 <p
                   onClick={() => {
                     setFilterData([]);
-                    setSelectedFilters({})
+                    setSelectedFilters({});
                   }}
                   className="text-gray-500 py-1 pr-2 cursor-pointer"
                 >
@@ -215,8 +204,8 @@ const SearchResultsPage: React.FC = () => {
                   label="Advance"
                   // icon="pi pi-external-link"
                   onClick={() => setVisible(true)}
-                 className="bg-green-600 rounded text-white py-1 px-2  cursor-pointer"
-                /> 
+                  className="bg-green-600 rounded text-white py-1 px-2  cursor-pointer"
+                />
               </div>
 
               <div
@@ -288,9 +277,12 @@ const SearchResultsPage: React.FC = () => {
                     >
                       clear
                     </p>
-                    <p 
-                    onClick={() =>searchVehicles()}
-                    className="text-green-600 cursor-pointer">search</p>
+                    <p
+                      onClick={() => searchVehicles()}
+                      className="text-green-600 cursor-pointer"
+                    >
+                      search
+                    </p>
                   </div>
                 </div>
               </div>
@@ -362,9 +354,11 @@ const SearchResultsPage: React.FC = () => {
                           >
                             clear
                           </p>
-                          <p 
-                          onClick={() =>searchVehicles()}
-                          className="text-green-600 cursor-pointer">search
+                          <p
+                            onClick={() => searchVehicles()}
+                            className="text-green-600 cursor-pointer"
+                          >
+                            search
                           </p>
                         </div>
                       </div>
@@ -397,99 +391,162 @@ const SearchResultsPage: React.FC = () => {
 
         {/* Vehicle Listings */}
         <section className="pt3 pb-8 rounded-2xl bgwhite">
-          <div className="max-w7xl bg-white rounded-lg shadow-lg mb-5 mx-auto px-2 py-2 flex items-center gap-3 ">
-            
-            <label className="text-xs font-medium text-gray-700">SORT BY</label>
-            <div className="relative">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none text-sm bg-white border border-gray-300 rounded-md px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+          <div className="flex items-center justify-between bg-white rounded-lg shadow-lg mb-5 mx-auto px-2 py-2 ">
+            <div 
+                  onClick={() => setVisible(true)}
+             className="lg:hidden">
+              {/* <Button
+                label="Advance search"
+                // icon="pi pi-external-link"
+                onClick={() => setVisible(true)}
+                className="bg-green-600 rounded text-white text-xs py-2 px-3  cursor-pointer"
+              /> */}
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <option value="Relevance">Relevance</option>
-                <option value="Price Low to High">Price Low to High</option>
-                <option value="Price High to Low">Price High to Low</option>
-                <option value="Year Newest">Year Newest</option>
-                <option value="Year Oldest">Year Oldest</option>
-                <option value="Mileage Low to High">Mileage Low to High</option>
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </div>
+            <div className=" flex items-center gap-3 ">
+              <label className="text-xs font-medium text-gray-700">
+                SORT BY
+              </label>
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none text-sm bg-white border border-gray-300 rounded-md px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                >
+                  <option value="Price Low to High">Price Low to High</option>
+                  <option value="Price High to Low">Price High to Low</option>
+                  <option value="Year Newest">Year Newest</option>
+                  <option value="Year Oldest">Year Oldest</option>
+                  <option value="Mileage Low to High">
+                    Mileage Low to High
+                  </option>
+                </select>
+                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              </div>
             </div>
           </div>
 
           <div className="max-w7xl mx-auto px2">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {
-            loading ? 
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, ].map((key)=>(
-
-            <div
-                  key={key}
-                  className="bg-white rounded-lg shadowm overflow-hidden hover:shadow transition-all"
-                >
-                  <div className="relative h-48">
-                    {/* <img
+              {loading
+                ? [1, 2, 3, 4, 5, 6, 7, 8, 9].map((key) => (
+                    <div
+                      key={key}
+                      className="bg-white rounded-lg shadowm overflow-hidden hover:shadow transition-all"
+                    >
+                      <div className="relative h-48">
+                        {/* <img
                       alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
                       className="w-full h-full object-cover"
                     /> */}
-                    <Skeleton width="100%" height="100%" className="mb-2" ></Skeleton>
-
-                  </div>
-                  <div className="p-2 lg:p-4">
-                    <Skeleton width="100%"  className="mb-2 py-3" borderRadius="10px"></Skeleton>
-                    <div className="flex justify-between items-center text-xs text-gray-600 mb-4">
-                    <Skeleton width="100px"  className="mb-2" borderRadius="10px"></Skeleton>
-                    <Skeleton width="50px"  className="mb-2" borderRadius="10px"></Skeleton>
-                        
+                        <Skeleton
+                          width="100%"
+                          height="100%"
+                          className="mb-2"
+                        ></Skeleton>
+                      </div>
+                      <div className="p-2 lg:p-4">
+                        <Skeleton
+                          width="100%"
+                          className="mb-2 py-3"
+                          borderRadius="10px"
+                        ></Skeleton>
+                        <div className="flex justify-between items-center text-xs text-gray-600 mb-4">
+                          <Skeleton
+                            width="100px"
+                            className="mb-2"
+                            borderRadius="10px"
+                          ></Skeleton>
+                          <Skeleton
+                            width="50px"
+                            className="mb-2"
+                            borderRadius="10px"
+                          ></Skeleton>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <Skeleton
+                            width="100px"
+                            className="mb-2"
+                            borderRadius="10px"
+                          ></Skeleton>
+                          <Skeleton
+                            width="100px"
+                            className="mb-2 py-5"
+                            borderRadius="10px"
+                          ></Skeleton>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                    <Skeleton width="100px"  className="mb-2" borderRadius="10px"></Skeleton>
-                    <Skeleton width="100px"  className="mb-2 py-5" borderRadius="10px"></Skeleton>
-                    </div>
-                  </div>
-                </div>
-            ))
-            : 
-              vehicles?.map((vehicle) => (
-                vehicle.first_image ?
-                <div
-                  key={vehicle.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-all"
-                >
-                  <div className="relative h-48 ">
-                    <img
-                      src={vehicle.first_image}
-                      alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-2 lg:p-4">
-                    <h3 className="text-green-600 font-semibold text-gray900 mb-2">
-                     {`${
-                        vehicle.year + " " + vehicle.make + " " + vehicle.model
-                      }`.slice(0, 20)}
-                      ...
-                    </h3>
-                    <div className="flex justify-between items-center text-xs text-gray-600 mb-4">
-                      <span>{vehicle.mileage.toLocaleString()} miles</span>
-                      <span>{vehicle.transmission}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-gray-900">
-                        #{parseInt(vehicle.price.slice(0, vehicle.price.toString().length -3)).toLocaleString()}
-                      </span>
-                      <button
-                        onClick={() => navigate(`/product/${vehicle.id}/${vehicle?.year}-${vehicle?.make}-${vehicle?.model}`)}
-                        className="cursor-pointer text-sm hover:bg-green-600 hover:text-white hover:px-4 py-2 rounded-md   text-green-600 hover:border-green-600 transition-all"
+                  ))
+                : vehicles?.map((vehicle) =>
+                    vehicle.first_image ? (
+                      <div
+                        key={vehicle.id}
+                        className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-all"
                       >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                : ''
-              ))}
-          
+                        <div className="relative h-48 ">
+                          <img
+                            src={vehicle.first_image}
+                            alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="p-2 lg:p-4">
+                          <h3 className="text-green-600 font-semibold text-gray900 mb-2">
+                            {`${
+                              vehicle.year +
+                              " " +
+                              vehicle.make +
+                              " " +
+                              vehicle.model
+                            }`.slice(0, 20)}
+                            ...
+                          </h3>
+                          <div className="flex justify-between items-center text-xs text-gray-600 mb-4">
+                            <span>
+                              {vehicle.mileage.toLocaleString()} miles
+                            </span>
+                            <span>{vehicle.transmission}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-lg font-bold text-gray-900">
+                              #
+                              {parseInt(
+                                vehicle.price.slice(
+                                  0,
+                                  vehicle.price.toString().length - 3
+                                )
+                              ).toLocaleString()}
+                            </span>
+                            <button
+                              onClick={() =>
+                                navigate(
+                                  `/product/${vehicle.id}/${vehicle?.year}-${vehicle?.make}-${vehicle?.model}`
+                                )
+                              }
+                              className="cursor-pointer text-sm hover:bg-green-600 hover:text-white hover:px-4 py-2 rounded-md   text-green-600 hover:border-green-600 transition-all"
+                            >
+                              View Details
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  )}
             </div>
           </div>
 
@@ -523,39 +580,28 @@ const SearchResultsPage: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <section className="bg-green-600 text-white py-12 mx-4 rounded-lg mb-8">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-blue-100 mb-8">
-            Explore our features and see how Fontein Resource Trade can simplify
-            automotive journey.
-          </p>
-          <button className="bg-white text-blue-500 px-8 py-3 rounded-md hover:bg-gray-100 transition-colors font-semibold">
-            Sign Up Now
-          </button>
-        </div>
-      </section>
-
-
+      {user ? (
+        ""
+      ) : (
+        <section className="bg-green-600 text-white py-12 mx-4 rounded-lg mb-8">
+          <div className="max-w-4xl mx-auto text-center px-4">
+            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-blue-100 mb-8">
+              Explore our features and see how Fontein Resource Auto Trade can
+              simplify automotive journey.
+            </p>
+            <Link
+              to="/auth/register"
+              className="bg-white text-blue-500 px-8 py-3 rounded-md hover:bg-gray-100 transition-colors font-semibold"
+            >
+              Sign Up Now
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
 
 export default SearchResultsPage;
-
-// {
-//     "color": [
-//         "White",
-//         "Red",
-//         "Blue",
-//         "Silver"
-//     ],
-//     "status": [
-//         "reserved",
-//         "importing"
-//     ],
-//     "transmission": [
-//         "Other",
-//         "CVT"
-//     ]
-// }
+ 

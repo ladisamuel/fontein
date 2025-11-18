@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Mail, ArrowRight, AlertCircle, ArrowLeft } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { verificationEmailCode } from "../../utils/api/userAPI";
+import { useRecoilState } from "recoil";
+import { authState } from "../../utils/atom/authAtom";
+import type { AuthType } from "../../utils/type/userType";
 
 const AccountVerifyCodePage: React.FC = () => {
+  const [userData, setUserData] = useRecoilState<AuthType>(authState)
   const params = useParams();
+  const navigate = useNavigate()
 
-  const [verificationCode, setVerificationCode] = useState([
+  const [verificationCode, setVerificationCode] = useState<string[]>([
     "",
     "",
     "",
@@ -15,7 +22,7 @@ const AccountVerifyCodePage: React.FC = () => {
   ]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const email = "ava.johnson@example.com"; // This would come from previous page
+  // const email = "ava.johnson@example.com"; // This would come from previous page
 
   const handleChange = (index: number, value: string) => {
     if (value.length > 1) return;
@@ -38,23 +45,43 @@ const AccountVerifyCodePage: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     const code = verificationCode.join("");
     if (code.length !== 6) {
       setError("Please enter the complete 6-digit code");
       return;
     }
+    const payload = {
+      code: code
+    }
 
-    setIsLoading(true);
+    console.log('code', code)
+    console.log('payload', payload)
+    // console.log('userInfo', userInfo)
+
+    await verificationEmailCode(payload)
+      .then((res) => {
+        console.log("res data in verificatin", res?.data?.message);
+        if(res?.data?.message?.includes('Your account is now verified.')){
+          setUserData({...userData, user: res?.data?.user})
+          navigate('/user/dashboard/summary')
+        }
+      })
+      .catch((err) => {
+        setVerificationCode(["", "", "", "", "", ""]);
+        toast.error(err?.response?.data?.error);
+      });
+
     // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect to reset password page
-      window.location.href = "/reset-password";
-    }, 1500);
+    // setTimeout(() => {
+    //   // Redirect to reset password page
+    //   window.location.href = "/reset-password";
+    // }, 1500);
+    setIsLoading(false);
   };
 
   const handleResendCode = () => {
@@ -62,14 +89,14 @@ const AccountVerifyCodePage: React.FC = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      alert("Verification code has been resent to your email");
+      toast.success("Verification code has been resent to your email");
     }, 1000);
   };
 
-  useEffect(()=>{
-    console.log('params.id', params.id)
-    console.log('params.verification_token', params.verification_token)
-  }, [])
+  useEffect(() => {
+    console.log("params.id", params.id);
+    console.log("params.verification_token", params.verification_token);
+  }, []);
 
   return (
     <div className="min-h-screen mt-[12vh] bg-gradient-to-br from-green-50 via-white to-purple-50">
@@ -85,8 +112,10 @@ const AccountVerifyCodePage: React.FC = () => {
               <h1 className="text-3xl font-bold text-gray-900 mb-3">
                 Check Your Email
               </h1>
-              <p className="text-gray-600">We sent a verification code to</p>
-              <p className="font-medium text-gray-900 mt-1">{email}</p>
+              <p className="text-gray-600">
+                We sent a verification code to your email.
+              </p>
+              {/* <p className="font-medium text-gray-900 mt-1">{email}</p> */}
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -170,12 +199,12 @@ const AccountVerifyCodePage: React.FC = () => {
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
               Need help?{" "}
-              <a
-                href="#"
+              <Link
+                to="mailto:support@fonteingroup.com"
                 className="text-green-600 hover:text-green-700 font-medium"
               >
                 Contact Support
-              </a>
+              </Link>
             </p>
           </div>
         </div>
@@ -185,4 +214,3 @@ const AccountVerifyCodePage: React.FC = () => {
 };
 
 export default AccountVerifyCodePage;
-
