@@ -264,7 +264,7 @@ const ContactPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-sm text-gray-600">
-                101 Market Street, Suite 500, San Francisco, CA 94103
+                km 10, Lagos/Ibadan Expressway Opposite Mobil Filling Station, Warewa, Ogun State, Nigeria
               </p>
             </div>
 

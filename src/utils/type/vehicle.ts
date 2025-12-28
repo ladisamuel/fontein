@@ -11,6 +11,10 @@ interface VehiclesImage {
   is_primary: boolean;
 }
 
+interface featuresItem {
+  content: string;
+}
+
 interface Vehicles {
   condition: string;
   description: string;
@@ -27,6 +31,7 @@ interface Vehicles {
   transmission: string;
   color: string;
   vin: string;
+  features: featuresItem[];
 
 }
 

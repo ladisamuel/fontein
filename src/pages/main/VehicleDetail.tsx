@@ -407,12 +407,13 @@ const VehicleDetailsPage = () => {
                   Key Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <FeatureItem feature="Apple CarPlay/Android Auto" />
-                  <FeatureItem feature="Blind Spot Monitor" />
-                  <FeatureItem feature="Adaptive Cruise Control" />
-                  <FeatureItem feature="Lane Keeping Assist" />
-                  <FeatureItem feature="Power Liftgate" />
-                  <FeatureItem feature="Heated Front Seats" />
+                  {carItem?.features.length ? (
+                    carItem?.features.map((feature, index) => (
+                      <FeatureItem key={index} feature={feature?.content} />
+                    ))
+                  ) : (
+                    <FeatureItem feature="..." />
+                  )}
                 </div>
               </div>
 
@@ -460,7 +461,7 @@ const VehicleDetailsPage = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button className="bg-primary-green text-white px-4 py-2 rounded bg-green-600 transition">
                   Schedule Test Drive
-                </button> 
+                </button>
               </div>
             </div>
           </div>

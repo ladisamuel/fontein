@@ -153,7 +153,7 @@ const AutoTradeWebsite: React.FC = () => {
             {carListings?.map((car, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <div className="relative">
                   <img

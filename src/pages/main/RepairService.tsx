@@ -734,14 +734,13 @@ const AutoTradePro: React.FC = () => {
                     </button>
                   </div>
                 ) : (
-                  
-                    <Link
-                  to={'/auth/login'}
-                      className="mt-6 w-fit flex items-center space-x-2 btn_primary text-white py-1 px-4 rounded shadow transition-all"
-                    >
-                      <Upload className="w-4 h-4" />
-                      <span>Login to add photos</span>
-                    </Link>
+                  <Link
+                    to={"/auth/login"}
+                    className="mt-6 w-fit flex items-center space-x-2 btn_primary text-white py-1 px-4 rounded shadow transition-all"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span>Login to add photos</span>
+                  </Link>
                 )}
               </div>
 
@@ -868,6 +867,7 @@ const AutoTradePro: React.FC = () => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Preferred Date
+                      <span className="text-sm text-red-500">*</span>
                     </label>
                     <input
                       name="preferred_date"
@@ -1068,6 +1068,13 @@ const AutoTradePro: React.FC = () => {
                       </p>
                     )}
                   </div>
+                )}
+
+                {values.service_method === "dropoff" && (
+                  <p className="text-gray-800 text-sm">
+                    km 10, Lagos/Ibadan Expressway Opposite Mobil Filling
+                    Station, Warewa, Ogun State, Nigeria.
+                  </p>
                 )}
               </div>
 
