@@ -204,7 +204,7 @@ const Register: React.FC = () => {
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   ) : (
-                    "Login"
+                    "Register"
                   )}
                 </button>
               </div>
