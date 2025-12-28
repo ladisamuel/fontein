@@ -407,8 +407,8 @@ const VehicleDetailsPage = () => {
                   Key Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {carItem?.features.length ? (
-                    carItem?.features.map((feature, index) => (
+                  {carItem?.features?.length ? (
+                    carItem?.features?.map((feature, index) => (
                       <FeatureItem key={index} feature={feature?.content} />
                     ))
                   ) : (
